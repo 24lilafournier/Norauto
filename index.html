@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Norauto — Guide Entretien Complet — Contrôle Interne & Compliance</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ── FOND BEIGE / CRÈME ── */
+  --bg:    #F4EFE6;
+  --bg2:   #EBE4D8;
+  --bg3:   #E1D9CB;
+  --bg4:   #D5CCBC;
+  --line:  #BFB8A8;
+  --line2: #ABA390;
+  /* ── ENCRE ── */
+  --ink:  #1E1C17;
+  --ink2: #3D3A30;
+  --ink3: #7A7260;
+  /* ── VERT FORÊT — accent principal ── */
+  --forest:     #2D5016;
+  --forest-dim: rgba(45,80,22,0.09);
+  --forest-line:rgba(45,80,22,0.28);
+  /* ── VERT SAUGE — accent secondaire ── */
+  --sage:     #5A7A3A;
+  --sage-dim: rgba(90,122,58,0.1);
+  --sage-line:rgba(90,122,58,0.28);
+  /* ── OCRE / TERRE — accent RH ── */
+  --ochre:     #8B6914;
+  --ochre-dim: rgba(139,105,20,0.1);
+  --ochre-line:rgba(139,105,20,0.28);
+  /* ── BORDEAUX — danger ── */
+  --wine:     #6B2020;
+  --wine-dim: rgba(107,32,32,0.1);
+  --wine-line:rgba(107,32,32,0.28);
+  /* ── BLEU ARDOISE — EN ── */
+  --slate:     #2A4A6B;
+  --slate-dim: rgba(42,74,107,0.1);
+  --slate-line:rgba(42,74,107,0.28);
+  /* ── TERRACOTTA — avertissement ── */
+  --terra:     #8B4020;
+  --terra-dim: rgba(139,64,32,0.1);
+  --terra-line:rgba(139,64,32,0.28);
+
+  --mono:  'JetBrains Mono', monospace;
+  --sans:  'Jost', sans-serif;
+  --serif: 'Libre Baskerville', serif;
+  --nav-h: 52px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14.5px;
+  line-height: 1.68;
+}
+
+/* ═══ PROGRESS ═══ */
+.progress {
+  position: fixed; top: 0; left: 0; height: 2px; z-index: 999;
+  background: linear-gradient(90deg, var(--forest), var(--ochre));
+  width: 0%; transition: width 0.08s;
+  box-shadow: 0 0 6px rgba(45,80,22,0.4);
+}
+
+/* ═══ NAV ═══ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: rgba(244,239,230,0.97);
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center;
+  padding: 0 28px; gap: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.nav-logo {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--forest); font-weight: 500;
+  letter-spacing: 0.07em; white-space: nowrap; flex-shrink: 0;
+}
+
+.nav-tabs {
+  display: flex; gap: 2px; list-style: none;
+  overflow-x: auto; scrollbar-width: none; flex: 1;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  font-family: var(--mono); font-size: 10px;
+  padding: 5px 11px; border-radius: 4px;
+  color: var(--ink3); text-decoration: none;
+  letter-spacing: 0.06em; white-space: nowrap;
+  transition: all 0.15s; cursor: pointer;
+  border: none; background: none;
+}
+.nav-tab:hover { color: var(--ink); background: var(--bg3); }
+.nav-tab.active { color: var(--forest); background: var(--forest-dim); }
+
+.nav-badge {
+  font-family: var(--mono); font-size: 10px;
+  padding: 4px 10px; border-radius: 3px;
+  background: var(--slate-dim);
+  border: 1px solid var(--slate-line);
+  color: var(--slate); letter-spacing: 0.05em;
+  white-space: nowrap; flex-shrink: 0;
+  cursor: pointer; transition: all 0.15s;
+}
+.nav-badge:hover { background: rgba(42,74,107,0.18); }
+
+/* ═══ HERO ═══ */
+.hero {
+  margin-top: var(--nav-h);
+  padding: 60px 52px 52px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(150deg, #C8D8B8 0%, #E8DEC8 40%, #F4EFE6 68%);
+  position: relative; overflow: hidden;
+}
+
+.hero::after {
+  content: 'CONTRÔLE';
+  position: absolute; right: -20px; top: -10px;
+  font-family: var(--serif); font-size: 180px;
+  font-weight: 700; color: rgba(45,80,22,0.04);
+  line-height: 1; pointer-events: none; letter-spacing: -0.05em;
+}
+
+.hero-inner { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: end; }
+
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--forest); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-eyebrow::after { content: ''; width: 30px; height: 1px; background: var(--forest); opacity: 0.4; }
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.5vw, 50px);
+  font-weight: 700; line-height: 1.08;
+  color: var(--forest); margin-bottom: 14px;
+  letter-spacing: -0.02em;
+}
+.hero h1 em { font-style: italic; color: var(--ochre); }
+
+.hero-sub { font-size: 14px; color: var(--ink2); max-width: 560px; line-height: 1.72; }
+
+.hero-chips { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; min-width: 190px; }
+.hchip {
+  font-family: var(--mono); font-size: 9.5px;
+  padding: 5px 12px; border-radius: 3px;
+  border: 1px solid var(--line2); color: var(--ink3);
+  letter-spacing: 0.04em; white-space: nowrap;
+}
+.hchip.f { border-color: var(--forest-line); color: var(--forest); background: var(--forest-dim); }
+.hchip.o { border-color: var(--ochre-line); color: var(--ochre); background: var(--ochre-dim); }
+.hchip.s { border-color: var(--slate-line); color: var(--slate); background: var(--slate-dim); }
+
+/* ═══ LAYOUT ═══ */
+.layout { display: grid; grid-template-columns: 248px 1fr; min-height: calc(100vh - var(--nav-h)); }
+
+/* ═══ SIDEBAR ═══ */
+.sidebar {
+  position: sticky; top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+  overflow-y: auto; border-right: 1px solid var(--line);
+  padding: 20px 0; background: var(--bg);
+  scrollbar-width: none;
+}
+.sidebar::-webkit-scrollbar { display: none; }
+
+.sb-group { margin-bottom: 6px; }
+.sb-head {
+  font-family: var(--mono); font-size: 8.5px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 10px 18px 3px; display: block;
+}
+.sh-f { color: var(--forest); }
+.sh-o { color: var(--ochre); }
+.sh-s { color: var(--slate); }
+.sh-g { color: var(--ink3); }
+
+.sb-link {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 7px 18px; font-size: 11.5px;
+  color: var(--ink3); text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all 0.13s; line-height: 1.35;
+}
+.sb-link:hover, .sb-link.active { color: var(--forest); border-left-color: var(--forest); background: var(--forest-dim); }
+.sb-link.rh:hover, .sb-link.rh.active { color: var(--ochre); border-left-color: var(--ochre); background: var(--ochre-dim); }
+.sb-link.en:hover, .sb-link.en.active { color: var(--slate); border-left-color: var(--slate); background: var(--slate-dim); }
+
+.sb-n { font-family: var(--mono); font-size: 9.5px; min-width: 16px; margin-top: 1px; flex-shrink: 0; }
+.sn-f { color: var(--forest); }
+.sn-o { color: var(--ochre); }
+.sn-s { color: var(--slate); }
+
+/* ═══ CONTENT ═══ */
+.content { padding: 44px 56px; max-width: 980px; }
+
+/* ═══ SECTION ═══ */
+.section { margin-bottom: 72px; scroll-margin-top: 72px; }
+.section-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 28px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.sec-tag {
+  font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: 0.08em; padding: 3px 9px;
+  border-radius: 3px; white-space: nowrap; flex-shrink: 0;
+}
+.st-f { background: var(--forest-dim); border: 1px solid var(--forest-line); color: var(--forest); }
+.st-o { background: var(--ochre-dim); border: 1px solid var(--ochre-line); color: var(--ochre); }
+.st-s { background: var(--slate-dim); border: 1px solid var(--slate-line); color: var(--slate); }
+
+.section h2 {
+  font-family: var(--serif); font-size: 24px;
+  font-weight: 700; color: var(--forest); line-height: 1.1;
+}
+
+/* ═══ POV BANNER ═══ */
+.pov-banner {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; border-radius: 8px; margin-bottom: 20px;
+}
+.pov-f { background: linear-gradient(135deg, rgba(45,80,22,0.07), rgba(45,80,22,0.03)); border: 1px solid var(--forest-line); }
+.pov-o { background: linear-gradient(135deg, rgba(139,105,20,0.08), rgba(139,105,20,0.03)); border: 1px solid var(--ochre-line); }
+.pov-s { background: linear-gradient(135deg, rgba(42,74,107,0.07), rgba(42,74,107,0.03)); border: 1px solid var(--slate-line); }
+
+.pov-icon { font-size: 22px; flex-shrink: 0; }
+.pov-text h3 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.pov-text p { font-size: 12.5px; color: var(--ink2); }
+.pov-f .pov-text h3 { color: var(--forest); }
+.pov-o .pov-text h3 { color: var(--ochre); }
+.pov-s .pov-text h3 { color: var(--slate); }
+
+/* ═══ CARD ═══ */
+.card {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 8px; padding: 20px 24px; margin-bottom: 14px;
+  box-shadow: 0 1px 4px rgba(45,80,22,0.05);
+}
+.card.f { border-left: 3px solid var(--forest); }
+.card.s { border-left: 3px solid var(--sage); }
+.card.o { border-left: 3px solid var(--ochre); }
+.card.w { border-left: 3px solid var(--wine); }
+.card.sl { border-left: 3px solid var(--slate); }
+.card.t { border-left: 3px solid var(--terra); }
+
+.card-title {
+  font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;
+}
+.ct-f { color: var(--forest); }
+.ct-s { color: var(--sage); }
+.ct-o { color: var(--ochre); }
+.ct-w { color: var(--wine); }
+.ct-sl { color: var(--slate); }
+.ct-t { color: var(--terra); }
+
+/* ═══ Q&A ═══ */
+.qa { border: 1px solid var(--line); border-radius: 7px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(45,80,22,0.05); }
+.qa-q { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; cursor: pointer; background: #fff; transition: background 0.13s; user-select: none; }
+.qa-q:hover { background: var(--bg2); }
+.qa-num { font-family: var(--mono); font-size: 9.5px; padding: 2px 7px; border-radius: 3px; white-space: nowrap; margin-top: 2px; flex-shrink: 0; }
+.qn-f { color: var(--forest); background: var(--forest-dim); border: 1px solid var(--forest-line); }
+.qn-o { color: var(--ochre); background: var(--ochre-dim); border: 1px solid var(--ochre-line); }
+.qn-s { color: var(--slate); background: var(--slate-dim); border: 1px solid var(--slate-line); }
+.qa-text { font-size: 13.5px; color: var(--ink); font-weight: 500; flex: 1; line-height: 1.45; }
+.qa-chev { color: var(--ink3); transition: transform 0.2s; flex-shrink: 0; margin-top: 3px; font-size: 13px; }
+.qa.open .qa-chev { transform: rotate(180deg); }
+.qa-body { display: none; padding: 18px 20px 20px; border-top: 1px solid var(--line); background: var(--bg); }
+.qa.open .qa-body { display: block; }
+
+/* ═══ SCRIPT ═══ */
+.script {
+  background: #EAF0E8;
+  border: 1px solid rgba(45,80,22,0.15);
+  border-left: 3px solid var(--forest);
+  border-radius: 5px; padding: 14px 18px;
+  margin: 10px 0; font-family: var(--mono);
+  font-size: 11.5px; color: #1A3A0A;
+  line-height: 1.78; white-space: pre-wrap;
+}
+.script.en { border-left-color: var(--slate); background: #E8EDF4; color: #102030; }
+.script em { color: var(--ink3); font-style: normal; }
+
+/* ═══ ALERT ═══ */
+.alert { padding: 12px 16px; border-radius: 5px; margin: 12px 0; font-size: 13px; line-height: 1.65; }
+.alert strong { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; margin-bottom: 5px; opacity: 0.65; }
+.al-f { background: var(--forest-dim); border: 1px solid var(--forest-line); color: #1A3A0A; }
+.al-s { background: var(--sage-dim); border: 1px solid var(--sage-line); color: #2A4A1A; }
+.al-o { background: var(--ochre-dim); border: 1px solid var(--ochre-line); color: #4A3A08; }
+.al-w { background: var(--wine-dim); border: 1px solid var(--wine-line); color: #4A0808; }
+.al-sl { background: var(--slate-dim); border: 1px solid var(--slate-line); color: #102030; }
+.al-t { background: var(--terra-dim); border: 1px solid var(--terra-line); color: #4A1A08; }
+
+/* ═══ GRID ═══ */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+
+/* ═══ TABLE ═══ */
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 12px 0; }
+th { font-family: var(--mono); font-size: 9px; color: var(--forest); letter-spacing: 0.07em; text-transform: uppercase; padding: 9px 12px; text-align: left; background: var(--forest-dim); border-bottom: 1px solid var(--line); }
+td { padding: 9px 12px; border-bottom: 1px solid var(--line); color: var(--ink2); vertical-align: top; line-height: 1.5; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(45,80,22,0.03); }
+
+/* ═══ BADGE ═══ */
+.badge { display: inline-block; font-family: var(--mono); font-size: 9px; padding: 2px 8px; border-radius: 20px; font-weight: 600; letter-spacing: 0.04em; }
+.bm { background: var(--wine-dim); color: var(--wine); border: 1px solid var(--wine-line); }
+.bg { background: var(--sage-dim); color: var(--sage); border: 1px solid var(--sage-line); }
+.bo { background: var(--ochre-dim); color: var(--ochre); border: 1px solid var(--ochre-line); }
+
+/* ═══ CHECKLIST ═══ */
+.chklist { list-style: none; }
+.chklist li { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid rgba(45,80,22,0.08); font-size: 13px; color: var(--ink2); line-height: 1.5; }
+.chklist li:last-child { border-bottom: none; }
+.chk { width: 17px; height: 17px; border-radius: 3px; border: 1px solid var(--line2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; font-size: 10px; cursor: pointer; transition: all 0.15s; }
+.chk.done { background: var(--forest); border-color: var(--forest); color: #fff; }
+
+/* ═══ TIMELINE ═══ */
+.tl { padding-left: 24px; border-left: 2px solid var(--line); margin: 14px 0; }
+.tl-item { position: relative; margin-bottom: 18px; }
+.tl-item::before { content: ''; position: absolute; left: -31px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--forest); border: 2px solid var(--bg2); }
+.tl-label { font-family: var(--mono); font-size: 9.5px; color: var(--forest); margin-bottom: 3px; letter-spacing: 0.05em; }
+.tl-item p { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+
+/* ═══ MATCH ROWS ═══ */
+.match-row { display: grid; grid-template-columns: 48px 1fr 14px 1fr; gap: 10px; align-items: start; padding: 8px 0; border-bottom: 1px solid rgba(45,80,22,0.1); font-size: 12.5px; }
+.match-row:last-child { border-bottom: none; }
+.mt { font-family: var(--mono); font-size: 8.5px; padding: 2pt 6pt; border-radius: 3px; }
+.mt-m { background: var(--wine-dim); color: var(--wine); border: 1px solid var(--wine-line); }
+.mt-g { background: var(--sage-dim); color: var(--sage); border: 1px solid var(--sage-line); }
+.match-jd { color: var(--ink2); line-height: 1.45; }
+.match-arr { color: var(--ink3); text-align: center; padding-top: 1px; }
+.match-you { color: #4A3A08; font-style: italic; line-height: 1.45; }
+
+/* ═══ FLOW ═══ */
+.flow { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; margin: 12px 0; }
+.flow-step { background: var(--bg2); border: 1px solid var(--line); border-radius: 4px; padding: 10px; }
+.flow-n { font-family: var(--mono); font-size: 9px; color: var(--forest); margin-bottom: 4px; }
+.flow-t { font-size: 11px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.flow-s { font-size: 10px; color: var(--ink3); line-height: 1.35; }
+
+/* ═══ EN BLOCKS ═══ */
+.en-block { border: 1px solid var(--slate-line); border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
+.en-block-head { display: flex; align-items: center; gap: 12px; padding: 13px 18px; background: var(--slate-dim); border-bottom: 1px solid var(--slate-line); cursor: pointer; user-select: none; transition: background 0.13s; }
+.en-block-head:hover { background: rgba(42,74,107,0.12); }
+.en-block-head .ql { font-family: var(--mono); font-size: 9.5px; color: var(--slate); background: rgba(42,74,107,0.12); border: 1px solid var(--slate-line); padding: 2px 7px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; }
+.en-block-head .qt { font-size: 13px; color: var(--ink); font-weight: 500; flex: 1; }
+.en-block-head .chev { color: var(--ink3); transition: transform 0.2s; font-size: 13px; }
+.en-block.open .chev { transform: rotate(180deg); }
+.en-block-body { display: none; padding: 16px 18px 18px; background: #EEF1F6; }
+.en-block.open .en-block-body { display: block; }
+
+/* ═══ STAR BLOCK ═══ */
+.star-block { background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+.star-head { display: flex; align-items: center; gap: 12px; padding: 14px 20px; background: var(--forest-dim); border-bottom: 1px solid var(--forest-line); cursor: pointer; user-select: none; }
+.star-head:hover { background: rgba(45,80,22,0.12); }
+.star-label { font-family: var(--mono); font-size: 9.5px; color: var(--forest); background: rgba(45,80,22,0.12); border: 1px solid var(--forest-line); padding: 2px 7px; border-radius: 3px; white-space: nowrap; }
+.star-title { font-size: 13px; color: var(--ink); font-weight: 500; flex: 1; }
+.star-chev { color: var(--ink3); transition: transform 0.2s; font-size: 13px; }
+.star-block.open .star-chev { transform: rotate(180deg); }
+.star-body { display: none; padding: 18px 20px; background: var(--bg); border-top: 1px solid var(--line); }
+.star-block.open .star-body { display: block; }
+.star-step { font-family: var(--mono); font-size: 9px; color: var(--forest); letter-spacing: 0.08em; text-transform: uppercase; margin: 12px 0 5px; }
+
+/* ═══ SCROLL TOP ═══ */
+.scroll-top { position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; background: var(--forest); color: #fff; border: none; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; z-index: 200; box-shadow: 0 4px 14px rgba(45,80,22,0.3); }
+.scroll-top.vis { opacity: 1; }
+
+hr { border: none; border-top: 1px solid var(--line); margin: 24px 0; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .content { padding: 28px 20px; }
+  .hero { padding: 40px 20px 32px; }
+  .hero-inner { grid-template-columns: 1fr; }
+  .g2, .g3, .flow { grid-template-columns: 1fr; }
+  .match-row { grid-template-columns: 48px 1fr; }
+  .match-arr, .match-you { display: none; }
+  nav { padding: 0 16px; gap: 12px; }
+  .nav-tabs { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="prog"></div>
+
+<nav>
+  <span class="nav-logo">NORAUTO // GUIDE_ENTRETIEN_v1.0</span>
+  <ul class="nav-tabs">
+    <li><a class="nav-tab" href="#decoder">Décoder</a></li>
+    <li><a class="nav-tab" href="#or-profil">Olivier Reynaert</a></li>
+    <li><a class="nav-tab" href="#or-technique">Technique CI</a></li>
+    <li><a class="nav-tab" href="#or-qa">Q&A Direction</a></li>
+    <li><a class="nav-tab" href="#rh-profil">RH — Fit</a></li>
+    <li><a class="nav-tab" href="#rh-qa">Q&A RH</a></li>
+    <li><a class="nav-tab" href="#stars">3 STAR</a></li>
+    <li><a class="nav-tab" href="#concepts">📚 Concepts clés</a></li>
+    <li><a class="nav-tab" href="#risques">⚠️ Définitions risques</a></li>
+    <li><a class="nav-tab" href="#recommandations">✍️ Formulations</a></li>
+    <li><a class="nav-tab" href="#mapping">Mapping</a></li>
+    <li><a class="nav-tab" href="#english">🇬🇧 English</a></li>
+    <li><a class="nav-tab" href="#pieges">Pièges</a></li>
+    <li><a class="nav-tab" href="#checklist">Checklist</a></li>
+  </ul>
+  <span class="nav-badge" onclick="document.getElementById('english').scrollIntoView({behavior:'smooth'})">🇬🇧 EN KIT</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Préparation entretien — 2 perspectives — Confidentiel</div>
+      <h1>Contrôle Interne<br>&amp; <em>Compliance</em><br>Norauto International</h1>
+      <p class="hero-sub">Guide double perspective : Olivier Reynaert (Directeur Risques — technicité CI, déploiement multi-pays, cartographie) + RH en présentiel (fit culturel, mobilité, motivation). English kit inclus.</p>
+    </div>
+    <div class="hero-chips">
+      <span class="hchip f">RÔLE CIBLE</span>
+      <span class="hchip">Norauto International</span>
+      <span class="hchip">Villeneuve-d'Ascq</span>
+      <span class="hchip">5 pays — 650 centres</span>
+      <span class="hchip o">🏢 Olivier Reynaert — Directeur</span>
+      <span class="hchip s">🇬🇧 English Kit inclus</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-group">
+    <span class="sb-head sh-f">🏢 Décoder</span>
+    <a class="sb-link" href="#decoder"><span class="sb-n sn-f">01</span>Décoder le poste</a>
+    <a class="sb-link" href="#norauto"><span class="sb-n sn-f">02</span>Norauto — Contexte</a>
+  </div>
+  <div class="sb-group">
+    <span class="sb-head sh-f">🎯 Olivier Reynaert</span>
+    <a class="sb-link" href="#or-profil"><span class="sb-n sn-f">O1</span>Profil & registre</a>
+    <a class="sb-link" href="#or-technique"><span class="sb-n sn-f">O2</span>Cours CI technique</a>
+    <a class="sb-link" href="#or-deploiement"><span class="sb-n sn-f">O3</span>Déploiement multi-pays</a>
+    <a class="sb-link" href="#or-qa"><span class="sb-n sn-f">O4</span>Q&A Direction</a>
+  </div>
+  <div class="sb-group">
+    <span class="sb-head sh-o">👁 RH Présentiel</span>
+    <a class="sb-link rh" href="#rh-profil"><span class="sb-n sn-o">R1</span>Fit culturel & mobilité</a>
+    <a class="sb-link rh" href="#rh-qa"><span class="sb-n sn-o">R2</span>Q&A RH scriptées</a>
+  </div>
+  <div class="sb-group">
+    <span class="sb-head sh-f">⭐ STAR</span>
+    <a class="sb-link" href="#stars"><span class="sb-n sn-f">S1</span>3 exemples STAR</a>
+  </div>
+  <div class="sb-group">
+    <span class="sb-head sh-f">📚 Concepts & Risques</span>
+    <a class="sb-link" href="#concepts"><span class="sb-n sn-f">C1</span>Concepts clés CI</a>
+    <a class="sb-link" href="#risques"><span class="sb-n sn-f">C2</span>Définitions des risques</a>
+    <a class="sb-link" href="#recommandations"><span class="sb-n sn-f">C3</span>Formulations recommandations</a>
+  </div>
+    <a class="sb-link en" href="#english"><span class="sb-n sn-s">E1</span>Pitch & réponses EN</a>
+  </div>
+  <div class="sb-group">
+    <span class="sb-head sh-g">✓ Final</span>
+    <a class="sb-link" href="#mapping"><span class="sb-n sn-f">F1</span>Mapping profil → JD</a>
+    <a class="sb-link" href="#pieges"><span class="sb-n sn-f">F2</span>Pièges à éviter</a>
+    <a class="sb-link" href="#checklist"><span class="sb-n sn-f">F3</span>Checklist</a>
+  </div>
+</aside>
+
+<div class="content">
+
+<!-- ══════════════════════════════
+     01 — DÉCODER
+══════════════════════════════ -->
+<section class="section" id="decoder">
+  <div class="section-head">
+    <span class="sec-tag st-f">01</span>
+    <h2>Décoder le poste — Ce qu'ils cherchent vraiment</h2>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Mission réelle — Ce n'est pas un poste d'audit</div>
+    <p style="color:var(--ink2);font-size:13px;margin-bottom:12px;">La JD dit : <em>"garantir la maîtrise des risques et la conformité des processus afin de renforcer la performance, la sécurité financière et extra-financière et la culture du contrôle interne."</em></p>
+    <p style="color:var(--ink2);font-size:13px;">Traduction : tu es <strong>2ème ligne</strong>, embarquée dans les opérations, pas évaluatrice externe. Tu construis, déploies, formes. Le département est nouveau — tu arrives pour structurer, pas pour maintenir.</p>
+  </div>
+
+  <div class="g2">
+    <div class="card f">
+      <div class="card-title ct-f">Ce qu'ils achètent</div>
+      <ul class="chklist">
+        <li><span class="chk" onclick="toggleChk(this)"></span>Expérience CI prouvée, multi-sites ou international</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Capacité à déployer un framework dans des équipes opérationnelles</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Pédagogie — sensibiliser sans braquer</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Autonomie — département nouveau, peu de mains pour tenir la tienne</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Anglais opérationnel — périmètre 5 pays</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Appétit pour la conformité extra-financière (RSE, CSRD)</li>
+      </ul>
+    </div>
+    <div class="card t">
+      <div class="card-title ct-t">Ce qu'ils craignent</div>
+      <ul class="chklist">
+        <li><span class="chk" onclick="toggleChk(this)"></span>Profil "auditeur" qui arrive pour pointer les fautes</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Quelqu'un qui attend qu'on lui structure le travail</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Manque d'adaptabilité au monde opérationnel (centres auto)</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Anglais surestimé — périmètre international réel</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Pas de compréhension du contexte multi-pays</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Les 6 responsabilités JD — Traduction concrète</div>
+    <table>
+      <thead><tr><th>Responsabilité JD</th><th>Ce que ça veut dire au quotidien</th><th>Ton levier</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Déployer et harmoniser le CI selon les standards groupe</strong></td><td>Construire la feuille de route CI pour les 5 pays, s'assurer que tous les centres appliquent les mêmes standards</td><td>Carrefour : déploiement self-assessment 82 POS multi-sites</td></tr>
+        <tr><td><strong>Cartographie des risques</strong></td><td>Identifier et prioriser les risques sur les processus clés de Norauto — opérationnels, financiers, extra-financiers</td><td>Carrefour : campagnes macro/micro sur 30 depts</td></tr>
+        <tr><td><strong>Évaluer l'efficacité des dispositifs</strong></td><td>Tester les contrôles en place, identifier les gaps, produire des findings</td><td>Carrefour : mission notes de frais, 15% non-conformes, 80K€</td></tr>
+        <tr><td><strong>Suivre les plans d'action</strong></td><td>Tracker les recommandations propres + celles de l'Audit Groupe et des CAC jusqu'à clôture</td><td>Carrefour : suivi des actions correctives SAQ</td></tr>
+        <tr><td><strong>Sensibiliser et accompagner les équipes</strong></td><td>Former les équipes terrain à la culture du contrôle — 650 centres, 11 000 collaborateurs</td><td>Carrefour : kick-off 82 directeurs, "parler leur langage"</td></tr>
+        <tr><td><strong>Contribuer à la compliance</strong></td><td>Travailler avec le Compliance Officer sur les programmes conformité — RGPD, CSRD, anti-corruption</td><td>HSBC : KYC/CDD, SAPIN II Carrefour</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert al-f">
+    <strong>// SIGNAL CLÉ — DÉPARTEMENT NOUVEAU</strong>
+    La personne précédente a évolué et le département est nouveau. Même signal que Keytrade : tu arrives pour construire. La question implicite d'Olivier Reynaert : "Est-ce que cette personne peut travailler en autonomie sur un périmètre non structuré ?" Chaque réponse doit signaler l'initiative et la capacité à structurer sans attendre.
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     02 — NORAUTO CONTEXTE
+══════════════════════════════ -->
+<section class="section" id="norauto">
+  <div class="section-head">
+    <span class="sec-tag st-f">02</span>
+    <h2>Norauto — Contexte stratégique</h2>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Ce que tu dois savoir avant l'entretien</div>
+    <table>
+      <thead><tr><th>Élément</th><th>Détail</th><th>Implication pour ton rôle</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Groupe Mobivia</strong></td><td>Groupe français, actionnaire de Norauto. Reporting groupe avec Audit Groupe et standards groupe.</td><td>Tu travailles avec des standards groupe que tu dois déployer localement — tension potentielle entre standards globaux et réalités locales</td></tr>
+        <tr><td><strong>5 pays</strong></td><td>France, Belgique (Auto5), Italie, Espagne, Portugal</td><td>Périmètre international réel — anglais opérationnel obligatoire, adaptation culturelle nécessaire</td></tr>
+        <tr><td><strong>650 centres, 11 000 collaborateurs</strong></td><td>Réseau de centres auto — opérationnel, terrain, pas de bureau</td><td>Tes interlocuteurs sont des directeurs de centre, pas des financiers. Tu dois parler leur langage.</td></tr>
+        <tr><td><strong>Transition responsable</strong></td><td>Leitmotiv Norauto — mobilité électrique, RSE, CSRD</td><td>La conformité extra-financière est dans ta JD. CSRD = nouveau périmètre de contrôle interne à anticiper</td></tr>
+        <tr><td><strong>Move Factory</strong></td><td>Siège moderne, éco-responsable, certifié BREEAM — Villeneuve-d'Ascq</td><td>Signal culturel : innovation, collaboration, durabilité. Pas une culture corporate rigide.</td></tr>
+        <tr><td><strong>Norauto International</strong></td><td>Équipes siège qui apportent expertise IT, Data, Commerce Digital, B2B, Value Chain</td><td>Tu travailles en transverse avec des équipes fonctionnelles — pas en silo CI</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="g2">
+    <div class="card s">
+      <div class="card-title ct-s">Pourquoi Norauto — 3 arguments à ne jamais oublier</div>
+      <div class="tl">
+        <div class="tl-item"><div class="tl-label">1. Le périmètre multi-pays</div><p>5 pays, 650 centres — c'est une complexité opérationnelle réelle. Déployer un framework CI dans ce contexte est une montée en compétences concrète.</p></div>
+        <div class="tl-item"><div class="tl-label">2. Le département en construction</div><p>Arriver quand tout est à structurer, c'est l'opportunité de mettre sa marque sur le sujet. En grande banque, tu maintenais. Ici, tu construis.</p></div>
+        <div class="tl-item"><div class="tl-label">3. La dimension extra-financière</div><p>CSRD, transition responsable — le périmètre du CI s'élargit aux risques non-financiers. C'est l'avant-garde du métier.</p></div>
+      </div>
+    </div>
+    <div class="card o">
+      <div class="card-title ct-o">Questions intelligentes à poser</div>
+      <ul class="chklist">
+        <li><span class="chk" onclick="toggleChk(this)"></span>"Où en est le framework de contrôle interne aujourd'hui — existe-t-il une cartographie des risques consolidée sur les 5 pays ?"</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>"Comment s'articule la relation entre le CI Norauto International et l'Audit Groupe Mobivia ?"</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>"Quels sont les processus considérés comme les plus risqués aujourd'hui — opérationnels, financiers ou extra-financiers ?"</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>"La CSRD est dans le périmètre du poste — où en est Norauto sur ce chantier ?"</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>"Comment les équipes terrain perçoivent-elles le contrôle interne aujourd'hui — comme un soutien ou une contrainte ?"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     O1 — OLIVIER REYNAERT
+══════════════════════════════ -->
+<section class="section" id="or-profil">
+  <div class="section-head">
+    <span class="sec-tag st-f">O1</span>
+    <h2>Olivier Reynaert — Profil & registre</h2>
+  </div>
+
+  <div class="pov-banner pov-f">
+    <span class="pov-icon">🎯</span>
+    <div class="pov-text">
+      <h3>Perspective Directeur Risques</h3>
+      <p>Olivier Reynaert teste ta technicité CI, ta compréhension du déploiement multi-pays, et ta capacité à structurer — pas juste exécuter. Il veut quelqu'un qui peut porter le sujet sans qu'il ait à le gérer au quotidien.</p>
+    </div>
+  </div>
+
+  <div class="alert al-w">
+    <strong>// RISQUE DE PERCEPTION — LE PLUS IMPORTANT DE CE GUIDE</strong>
+    Ton profil naturel est fort sur l'analyse, le contrôle terrain et l'interaction métiers. Mais il peut être perçu comme "trop opérationnel / pas assez structurant" pour un poste groupe. C'est le risque principal. Chaque réponse doit corriger cette perception. Tu ne viens pas exécuter des tests — tu viens structurer et faire évoluer le dispositif CI à une échelle groupe.
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Le positionnement à tenir — Non négociable</div>
+    <div class="g2" style="margin-bottom:0;">
+      <div>
+        <p style="color:var(--wine);font-size:12.5px;font-weight:600;margin-bottom:8px;">❌ Comment NE PAS te présenter</p>
+        <ul style="padding-left:14px;color:var(--ink2);font-size:12.5px;line-height:1.9;">
+          <li>"Je fais des tests de contrôle"</li>
+          <li>"Je vérifie la conformité des processus"</li>
+          <li>"J'exécute les campagnes de self-assessment"</li>
+          <li>"Je remonte les findings au management"</li>
+        </ul>
+        <p style="color:var(--ink3);font-size:11.5px;margin-top:8px;font-style:italic;">→ Ce sont des tâches d'exécution. Pas le niveau attendu.</p>
+      </div>
+      <div>
+        <p style="color:var(--forest);font-size:12.5px;font-weight:600;margin-bottom:8px;">✔ Comment te présenter</p>
+        <ul style="padding-left:14px;color:var(--ink2);font-size:12.5px;line-height:1.9;">
+          <li>"J'évalue la robustesse du dispositif — design ET exécution"</li>
+          <li>"J'assure l'interface entre les exigences groupe et les réalités locales"</li>
+          <li>"Je structure et harmonise les pratiques à l'échelle multi-sites"</li>
+          <li>"Je pilote la montée en maturité du contrôle interne"</li>
+        </ul>
+        <p style="color:var(--ink3);font-size:11.5px;margin-top:8px;font-style:italic;">→ C'est le niveau structurant attendu.</p>
+      </div>
+    </div>
+    <div class="alert al-f" style="margin-top:12px;">
+      <strong>// LA PHRASE DE POSITIONNEMENT</strong>
+      "Je me positionne comme interface entre le terrain opérationnel et la structuration du contrôle interne groupe — pas comme un contrôleur qui exécute des tests."
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Ce qu'Olivier Reynaert va tester — Par ordre de priorité</div>
+    <table>
+      <thead><tr><th>Ce qu'il teste</th><th>Ce qu'il veut entendre</th><th>Ce qu'il ne veut PAS entendre</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Structuration groupe</strong></td>
+          <td>"J'évalue la robustesse du dispositif en analysant à la fois le design et l'exécution des contrôles"</td>
+          <td>"Je fais des tests sur échantillon"</td>
+        </tr>
+        <tr>
+          <td><strong>Déploiement multi-sites</strong></td>
+          <td>"J'assurais le lien entre les exigences groupe et les réalités opérationnelles locales — relay, coordination, adaptation"</td>
+          <td>"J'ai déployé un questionnaire dans 82 magasins"</td>
+        </tr>
+        <tr>
+          <td><strong>Vision risk-based</strong></td>
+          <td>"Je priorise mes actions par niveau de risque résiduel — je concentre les efforts là où les failles sont structurelles"</td>
+          <td>"Je traite tous les processus de la même façon"</td>
+        </tr>
+        <tr>
+          <td><strong>Culture du contrôle</strong></td>
+          <td>"Je sais vulgariser et influencer des équipes opérationnelles — le CI doit être perçu comme un outil pour eux"</td>
+          <td>"Je sensibilise les équipes aux règles à respecter"</td>
+        </tr>
+        <tr>
+          <td><strong>Autonomie structurante</strong></td>
+          <td>"Dans un département nouveau, je sais construire sans attendre qu'on me dise quoi faire"</td>
+          <td>"Je m'adapte à ce qu'on me demande"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Questions quasi certaines — Avec les réponses attendues</div>
+
+    <div class="qa" onclick="toggleQA(this)">
+      <div class="qa-q"><span class="qa-num qn-f">Q.O★1</span><span class="qa-text">Comment harmoniser un dispositif de contrôle interne dans plusieurs pays ?</span><span class="qa-chev">▾</span></div>
+      <div class="qa-body">
+        <div class="alert al-f" style="margin-top:0;"><strong>// STRUCTURE ATTENDUE</strong>5 étapes dans l'ordre. Ne pas sauter à la solution sans avoir posé le diagnostic.</div>
+        <div class="script">"Ma démarche en 5 étapes.
+
+D'abord, comprendre les écarts existants : avant d'harmoniser, il faut cartographier ce qui existe dans chaque pays — pratiques actuelles, niveaux de maturité, contraintes locales (légales, culturelles, organisationnelles). On ne peut pas standardiser ce qu'on ne comprend pas.
+
+Ensuite, définir le référentiel commun : identifier les processus et contrôles qui doivent être uniformes dans tous les pays — les non-négociables groupe — vs. ceux qui peuvent être adaptés localement. Le standard porte sur le fond, pas nécessairement sur la forme.
+
+Troisièmement, adapter sans imposer : la même exigence peut se traduire différemment selon le pays. Un directeur de centre en Italie ne réagit pas de la même façon qu'un responsable en France. J'adapte le discours et les outils — pas le niveau d'exigence.
+
+Quatrièmement, identifier des relais locaux : dans chaque pays, trouver des personnes qui comprennent les enjeux du CI et peuvent porter le message terrain. Sans relais, le CI reste une initiative siège sans ancrage opérationnel.
+
+Cinquièmement, piloter via des KPIs : taux de complétion des assessments, nombre de findings ouverts par pays, délai moyen de mise en œuvre des recommandations. Ce qui ne se mesure pas ne progresse pas.
+
+Chez Carrefour Belgium, j'ai pratiqué cette logique de relay entre les exigences groupe et les réalités opérationnelles des 82 sites. Le périmètre s'élargit à 5 pays — la méthode reste."</div>
+      </div>
+    </div>
+
+    <div class="qa" onclick="toggleQA(this)">
+      <div class="qa-q"><span class="qa-num qn-f">Q.O★2</span><span class="qa-text">Comment embarquer des équipes opérationnelles retail sur les sujets CI ?</span><span class="qa-chev">▾</span></div>
+      <div class="qa-body">
+        <div class="alert al-f" style="margin-top:0;"><strong>// CLUE</strong>Retail = terrain. La réponse doit montrer que tu sais adapter le langage, pas imposer des frameworks.</div>
+        <div class="script">"Trois principes que j'ai appliqués chez Carrefour et que j'importerais ici.
+
+Premier principe : parler leur langage, pas le mien. Un directeur de centre auto ne s'intéresse pas au COSO. Il s'intéresse à ce qui le protège, lui, en cas de problème. Je ne parle pas de 'dispositif de maîtrise des risques' — je lui montre comment ce contrôle évite un incident opérationnel pendant sa période de forte activité. C'est le repositionnement fondamental : le CI est un outil pour eux, pas sur eux.
+
+Deuxième principe : trouver les early adopters. Dans tout réseau, il y a des directeurs qui comprennent l'enjeu avant les autres. Je les identifie, je les implique en amont, et je les laisse porter le message auprès de leurs pairs. La crédibilité vient du terrain, pas du siège.
+
+Troisième principe : simplifier sans dégrader. Le formulaire le plus rigoureux n'est pas le meilleur — c'est celui qui est complété correctement par des équipes opérationnelles. Chez Carrefour, j'ai simplifié le dispositif initial tout en maintenant les exigences groupe. Résultat : 75% de complétion en 2 semaines sur un réseau de 82 sites, en plein rush pré-Noël."</div>
+      </div>
+    </div>
+
+    <div class="qa" onclick="toggleQA(this)">
+      <div class="qa-q"><span class="qa-num qn-f">Q.O★3</span><span class="qa-text">Comment priorisez-vous vos actions en contrôle interne ?</span><span class="qa-chev">▾</span></div>
+      <div class="qa-body">
+        <div class="alert al-w" style="margin-top:0;"><strong>// RÉPONSE OBLIGATOIRE</strong>Risk-based. Si tu ne dis pas "risk-based" dans cette réponse, tu perds des points.</div>
+        <div class="script">"Ma priorisation est systématiquement risk-based — je concentre mes efforts là où le risque résiduel est le plus élevé, pas là où c'est le plus facile à évaluer.
+
+Concrètement, ça se traduit par trois niveaux de filtrage.
+
+D'abord, l'exposition au risque : quel est l'impact potentiel si ce processus n'est pas maîtrisé ? Financier, opérationnel, réglementaire ? C'est le critère principal.
+
+Ensuite, la robustesse du dispositif existant : est-ce que des contrôles compensatoires existent et fonctionnent ? Un processus risqué mais bien contrôlé n'est pas prioritaire par rapport à un processus moins risqué mais sans contrôle du tout.
+
+Enfin, la criticité du timing : certains processus sont saisonniers (fêtes de fin d'année pour le retail), d'autres sont liés à des échéances réglementaires (CSRD, reporting groupe). Ces facteurs contextuels entrent dans la priorisation.
+
+Ce qui ne fait pas partie de mes critères de priorisation : la facilité d'accès au processus, la sympathie avec l'équipe concernée, ou le fait qu'un processus n'ait jamais eu de problème apparent — c'est exactement là que se cachent les vrais blind spots."</div>
+      </div>
+    </div>
+
+    <div class="qa" onclick="toggleQA(this)">
+      <div class="qa-q"><span class="qa-num qn-f">Q.O★4</span><span class="qa-text">Qu'est-ce qu'un bon dispositif de contrôle interne ?</span><span class="qa-chev">▾</span></div>
+      <div class="qa-body">
+        <div class="alert al-f" style="margin-top:0;"><strong>// 4 MOTS CLÉS OBLIGATOIRES</strong>Proportionné — efficace — intégré aux opérations — piloté par le risque.</div>
+        <div class="script">"Un bon dispositif de contrôle interne est proportionné, efficace, intégré aux opérations, et piloté par le risque.
+
+Proportionné : les contrôles les plus lourds sont réservés aux risques les plus critiques. Un dispositif qui traite une erreur de 50€ avec le même niveau de contrôle qu'un risque de fraude de 50 000€ est inefficient — et finalement abandonné par les équipes.
+
+Efficace : il fonctionne en pratique, pas seulement sur le papier. La différence entre design et exécution est l'angle mort de beaucoup de dispositifs CI. Chez Carrefour, j'ai identifié des contrôles documentés depuis des années, jamais réellement appliqués. Un contrôle non exécuté ne protège de rien.
+
+Intégré aux opérations : il fait partie du flux de travail naturel — il n'est pas une couche additionnelle. Plus un contrôle est intégré au processus lui-même, plus il sera maintenu dans le temps indépendamment des personnes.
+
+Piloté par le risque : il évolue avec le profil de risque de l'organisation. Un dispositif figé devient obsolète. La cartographie des risques doit être un document vivant, pas un exercice annuel."</div>
+      </div>
+    </div>
+
+    <div class="qa" onclick="toggleQA(this)">
+      <div class="qa-q"><span class="qa-num qn-f">Q.O★5</span><span class="qa-text">Quelle est la place de la data dans vos dispositifs de contrôle ?</span><span class="qa-chev">▾</span></div>
+      <div class="qa-body">
+        <div class="alert al-s" style="margin-top:0;"><strong>// QUESTION TRÈS ALIGNÉE AVEC OLIVIER REYNAERT</strong>Montre une compréhension moderne du CI — au-delà des tests manuels.</div>
+        <div class="script">"La data est un levier sous-exploité en contrôle interne, surtout dans les environnements multi-sites comme Norauto.
+
+Dans mon expérience, j'ai utilisé l'analyse de données de deux façons complémentaires.
+
+Pour la détection : identifier des anomalies que l'échantillonnage manuel ne capte pas. Sur les notes de frais chez Carrefour, c'est l'analyse des données qui m'a permis de révéler 15% de non-conformité sur 200 collaborateurs — un échantillon manuel de 30 transactions n'aurait pas eu la même portée.
+
+Pour le monitoring continu : des indicateurs automatisés qui signalent des dégradations avant qu'elles deviennent des incidents. Un taux de validation hors délai qui monte de 5% à 15% en un mois — c'est un signal faible qui annonce un problème structurel.
+
+Chez Norauto, avec 650 centres, la data est indispensable. On ne peut pas tester manuellement chaque centre. En revanche, on peut identifier les centres atypiques via leurs données et concentrer les ressources là où les signaux sont les plus préoccupants. C'est ce qu'on appelle un audit ou CI data-driven — et c'est la direction vers laquelle le métier évolue."</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card o">
+    <div class="card-title ct-o">Questions intelligentes à poser — Version enrichie</div>
+    <ul class="chklist">
+      <li><span class="chk" onclick="toggleChk(this)"></span>"Quel est aujourd'hui le niveau de maturité du contrôle interne chez Norauto — sur une échelle de 1 à 5 ?"</li>
+      <li><span class="chk" onclick="toggleChk(this)"></span>"Quels sont les principaux écarts entre les 5 pays aujourd'hui ?"</li>
+      <li><span class="chk" onclick="toggleChk(this)"></span>"Quels sont les chantiers prioritaires sur les 12 prochains mois ?"</li>
+      <li><span class="chk" onclick="toggleChk(this)"></span>"Quelle est la place de la data dans vos dispositifs de contrôle actuels ?"</li>
+      <li><span class="chk" onclick="toggleChk(this)"></span>"Comment s'articule la relation entre le CI Norauto International et l'Audit Groupe Mobivia ?"</li>
+      <li><span class="chk" onclick="toggleChk(this)"></span>"Comment les équipes terrain perçoivent-elles le contrôle interne aujourd'hui — comme un soutien ou une contrainte ?"</li>
+    </ul>
+  </div>
+
+  <div class="alert al-f">
+    <strong>// REGISTRE OLIVIER REYNAERT</strong>
+    Technique, structuré, risk-based. Il veut des exemples précis, pas des principes généraux. Pour chaque réponse : niveau de risque → faille structurelle → action → résultat. Durée cible : 90 secondes max.
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     O2 — COURS CI TECHNIQUE
+══════════════════════════════ -->
+<section class="section" id="or-technique">
+  <div class="section-head">
+    <span class="sec-tag st-f">O2</span>
+    <h2>Contrôle Interne — Cours technique</h2>
+  </div>
+
+  <div class="alert al-w">
+    <strong>// PRIORITÉ ABSOLUE</strong>
+    Olivier Reynaert est Directeur Risques. Il va tester les définitions exactes. Maîtrise ces notions avant l'entretien.
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">COSO 2013 — Les 5 composantes</div>
+    <div class="tl">
+      <div class="tl-item"><div class="tl-label">1. Control Environment</div><p>Ton de la direction, valeurs, intégrité. La culture du contrôle. Chez Norauto : le fait que le département CI soit nouveau est un signal — la direction veut structurer cette culture.</p></div>
+      <div class="tl-item"><div class="tl-label">2. Risk Assessment</div><p>Identification et évaluation des risques. Cartographie des risques = ton outil principal. Deux axes : probabilité × impact. Produit une vue priorisée des risques.</p></div>
+      <div class="tl-item"><div class="tl-label">3. Control Activities</div><p>Les contrôles effectifs : préventifs (bloquer l'erreur avant) vs. détectifs (la repérer après), manuels vs. automatisés, Key Controls vs. contrôles standard.</p></div>
+      <div class="tl-item"><div class="tl-label">4. Information & Communication</div><p>Flux d'information fiables. Documentation des contrôles. Reporting au management et au Comité Exécutif. Remontée des findings.</p></div>
+      <div class="tl-item"><div class="tl-label">5. Monitoring Activities</div><p>Surveillance continue. Self-assessments périodiques. Suivi des plans d'action. C'est exactement ce que tu feras chez Norauto.</p></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card f">
+      <div class="card-title ct-f">Les 3 lignes de défense — Ton positionnement</div>
+      <table style="margin:0;">
+        <thead><tr><th>Ligne</th><th>Acteurs</th><th>Rôle</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1ère ligne</strong></td><td>Opérationnels, directeurs de centre</td><td>Propriétaires du risque, exécutent les contrôles</td></tr>
+          <tr><td><strong>2ème ligne</strong></td><td><strong>Toi — CI & Compliance</strong></td><td>Définit les standards, challenge, conseille, coordonne</td></tr>
+          <tr><td><strong>3ème ligne</strong></td><td>Audit Groupe Mobivia, CAC</td><td>Assurance indépendante — client de ton travail</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card s">
+      <div class="card-title ct-s">Qu'est-ce qu'un bon contrôle ?</div>
+      <ul class="chklist">
+        <li><span class="chk" onclick="toggleChk(this)"></span>Il adresse un risque clairement identifié</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Il est bien conçu et efficace en pratique</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Il est appliqué de façon cohérente et monitoré</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Il est simple, proportionné et soutenable</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">La cartographie des risques — Méthode</div>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-n">01</div><div class="flow-t">Identification</div><div class="flow-s">Recenser les risques par processus — entretiens, ateliers, revue documentaire</div></div>
+      <div class="flow-step"><div class="flow-n">02</div><div class="flow-t">Évaluation</div><div class="flow-s">Probabilité × Impact = exposition brute. Avec et sans contrôles existants.</div></div>
+      <div class="flow-step"><div class="flow-n">03</div><div class="flow-t">Priorisation</div><div class="flow-s">Heat map des risques. Focus sur les risques résiduels élevés.</div></div>
+      <div class="flow-step"><div class="flow-n">04</div><div class="flow-t">Plan d'action</div><div class="flow-s">Pour chaque risque prioritaire : contrôle à renforcer, responsable, délai</div></div>
+      <div class="flow-step"><div class="flow-n">05</div><div class="flow-t">Monitoring</div><div class="flow-s">Suivi périodique de la mise en œuvre. Mise à jour de la cartographie.</div></div>
+    </div>
+    <div class="alert al-s" style="margin-top:10px;">
+      <strong>// LIEN TON EXPÉRIENCE</strong>
+      Carrefour Belgium : campagnes macro (12 depts) et micro (18 depts) = Risk Assessment COSO. Tu as fait de la cartographie des risques — tu ne le savais pas sous ce nom mais la logique est identique.
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Évaluation de l'efficacité des contrôles — Méthodes</div>
+    <table>
+      <thead><tr><th>Méthode</th><th>Description</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Walkthrough</strong></td><td>Suivre une transaction de bout en bout pour valider que le contrôle est bien conçu et exécuté</td><td>Compréhension initiale d'un processus</td></tr>
+        <tr><td><strong>Test sur échantillon</strong></td><td>Sélectionner X transactions et vérifier que le contrôle a été appliqué — preuves, approbations, délais</td><td>Efficacité opérationnelle</td></tr>
+        <tr><td><strong>Analyse de données</strong></td><td>Requêtes sur les systèmes pour identifier des anomalies — doublons, dépassements de seuils, exceptions</td><td>Détection de patterns à grande échelle</td></tr>
+        <tr><td><strong>Self-assessment</strong></td><td>Les équipes évaluent elles-mêmes leurs contrôles — guidées par un questionnaire structuré</td><td>Couverture large, culture du contrôle</td></tr>
+        <tr><td><strong>Entretiens</strong></td><td>Discussions structurées avec les owners de processus</td><td>Compréhension qualitative, identification de blind spots</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Conformité extra-financière — CSRD & Norauto</div>
+    <p style="color:var(--ink2);font-size:13px;margin-bottom:10px;">La JD mentionne "sécurité extra-financière". C'est la CSRD — Corporate Sustainability Reporting Directive, applicable aux grandes entreprises dès 2024-2025.</p>
+    <div class="g2" style="margin-bottom:0;">
+      <div>
+        <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong style="color:var(--forest);">Ce que CSRD impose :</strong> reporting annuel sur les risques et impacts environnementaux, sociaux et de gouvernance (ESG). Ce reporting doit être auditable — donc contrôlé.</p>
+        <p style="color:var(--ink2);font-size:13px;"><strong style="color:var(--forest);">Chez Norauto :</strong> "transition responsable des automobilistes" = mobilité électrique, empreinte carbone des centres, chaîne d'approvisionnement responsable. Tout ça doit être mesuré, contrôlé, reporté.</p>
+      </div>
+      <div>
+        <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong style="color:var(--forest);">Ton rôle CI :</strong> s'assurer que les données ESG déclarées sont fiables — mêmes principes que pour les données financières. Existence, exhaustivité, exactitude.</p>
+        <p style="color:var(--ink2);font-size:13px;"><strong style="color:var(--forest);">La phrase à retenir :</strong> "La CSRD étend le périmètre du contrôle interne aux données non-financières. C'est une extension naturelle de ce que je fais déjà sur les données financières."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     O3 — DÉPLOIEMENT MULTI-PAYS
+══════════════════════════════ -->
+<section class="section" id="or-deploiement">
+  <div class="section-head">
+    <span class="sec-tag st-f">O3</span>
+    <h2>Déploiement multi-pays — La vraie complexité du rôle</h2>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Les défis du déploiement CI dans 5 pays</div>
+    <table>
+      <thead><tr><th>Défi</th><th>Ce que ça veut dire concrètement</th><th>Comment tu l'adresses</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Standards groupe vs. réalités locales</strong></td><td>Mobivia impose des standards. Les 5 pays ont des contextes légaux, culturels et opérationnels différents.</td><td>Adapter la forme, pas le fond. Le standard reste le même — la façon de le présenter change selon le pays.</td></tr>
+        <tr><td><strong>Langue et communication</strong></td><td>Italie, Espagne, Portugal — pas forcément francophones</td><td>Anglais comme langue de travail commune. Documents bilingues. Formation des relais locaux.</td></tr>
+        <tr><td><strong>Résistance terrain</strong></td><td>Les directeurs de centre voient le CI comme une charge, pas une aide</td><td>Même logique que les 82 POS Carrefour — parler leur langage, montrer l'intérêt pour eux</td></tr>
+        <tr><td><strong>Absence de relais locaux</strong></td><td>Pas d'équipe CI dans chaque pays — tu travailles à distance</td><td>Identifier des "champions" locaux, former les managers intermédiaires</td></tr>
+        <tr><td><strong>Hétérogénéité des processus</strong></td><td>Chaque pays a ses propres pratiques — harmoniser sans rigidifier</td><td>Partir des processus existants, identifier les risques communs, proposer une harmonisation progressive</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert al-f">
+    <strong>// LA PHRASE CLÉ POUR OLIVIER REYNAERT</strong>
+    "Déployer un framework CI dans 5 pays, c'est la même logique que déployer un self-assessment dans 82 points de vente — adapter le discours à chaque interlocuteur, trouver les relais locaux, et s'assurer que la forme locale respecte le fond groupe. J'ai fait ça chez Carrefour à une échelle nationale. Le périmètre s'élargit, la méthode reste."
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     O4 — Q&A DIRECTION
+══════════════════════════════ -->
+<section class="section" id="or-qa">
+  <div class="section-head">
+    <span class="sec-tag st-f">O4</span>
+    <h2>Q&A Direction — Réponses scriptées</h2>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-f">Q.O1</span><span class="qa-text">Présentez-vous — pourquoi ce poste chez Norauto ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="alert al-w" style="margin-top:0;"><strong>// POSITIONNEMENT CRITIQUE</strong>Ne pas faire une liste chronologique. Ne pas dire "j'exécute des tests". Ce pitch doit signaler : structuration groupe + terrain + amélioration. Voir la card "pitch calibré" dans la section O1.</div>
+      <div class="script">"J'ai développé une expérience en contrôle interne dans des environnements multi-sites, avec une forte dimension terrain.
+
+Chez Carrefour Belgique, j'étais notamment impliquée dans les campagnes d'auto-évaluation des risques, où j'assurais le lien entre les exigences groupe et les réalités opérationnelles locales.
+
+Mon rôle ne se limitait pas à tester des contrôles : je cherchais à comprendre les failles structurelles dans les processus — notamment via l'analyse de données et les échanges avec les équipes — afin de proposer des améliorations concrètes et adaptées au terrain.
+
+Avant ça, chez HSBC, j'étais première ligne sur le risque réglementaire pour un portefeuille de clients entreprises — cette expérience m'a donné une lecture transversale du risque opérationnel, compliance et réglementaire.
+
+Ce qui m'intéresse aujourd'hui chez Norauto, c'est précisément de contribuer à structurer et faire évoluer ces dispositifs à une échelle plus globale — 5 pays, 650 centres — tout en gardant ce lien fort avec les opérations. Et la dimension extra-financière, avec la CSRD, élargit le périmètre du CI vers des sujets qui sont l'avenir du métier."</div>
+    </div>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-f">Q.O2</span><span class="qa-text">Comment déploieriez-vous un framework de contrôle interne dans 5 pays avec des cultures différentes ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="script">"Je structurerais ça en trois phases.
+
+D'abord, la compréhension : avant de déployer quoi que ce soit, je m'appuie sur les équipes locales pour comprendre les processus existants, les risques perçus, et les contraintes réglementaires propres à chaque pays. On ne peut pas harmoniser ce qu'on ne comprend pas.
+
+Ensuite, la priorisation : je construis la cartographie des risques consolidée — quels sont les processus communs aux 5 pays, et où sont les risques les plus élevés ? Ce sont ces processus qui bénéficient en premier d'un dispositif de contrôle harmonisé.
+
+Enfin, le déploiement adapté : le standard groupe reste le même — c'est le fond. Mais la forme s'adapte. Le discours pour une équipe italienne en centre auto ne sera pas le même que pour une équipe corporate en France. J'ai pratiqué cette logique chez Carrefour Belgium sur 82 sites — adapter le message sans compromettre l'exigence.
+
+Et dans chaque pays, j'identifie des relais locaux — des managers intermédiaires qui peuvent porter le message terrain. Le CI ne se déploie pas depuis un bureau de siège sans relais."</div>
+    </div>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-f">Q.O3</span><span class="qa-text">Comment évaluez-vous l'efficacité d'un contrôle ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="script">"En deux étapes : d'abord le design, ensuite l'efficacité opérationnelle.
+
+Sur le design : est-ce que le contrôle est bien conçu pour adresser le risque identifié ? Je fais un walkthrough — je suis le processus de bout en bout pour valider que le contrôle existe vraiment et qu'il couvre bien l'assertion visée.
+
+Sur l'efficacité opérationnelle : est-ce que le contrôle fonctionne en pratique ? Je teste par échantillonnage — je sélectionne des transactions et je vérifie que le contrôle a été appliqué, avec les preuves attendues. Je complète avec de l'analyse de données quand les volumes le permettent — identifier des patterns d'anomalies que l'échantillonnage ne capte pas.
+
+La distinction est fondamentale : un contrôle peut être bien conçu sur le papier et mal exécuté sur le terrain. Chez Carrefour, j'ai identifié des contrôles documentés comme opérationnels depuis des années — qui n'étaient en réalité jamais exécutés. C'est ce qu'on appelle un blind spot."</div>
+    </div>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-f">Q.O4</span><span class="qa-text">Comment vous assurez-vous que vos recommandations sont réellement mises en œuvre ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="script">"La recommandation sans suivi ne vaut rien. C'est la partie la plus difficile du contrôle interne — et la plus critique.
+
+Ma démarche en trois temps.
+
+D'abord, la co-construction : je ne produis pas des recommandations dans mon coin et je les envoie par email. Je travaille avec les équipes opérationnelles pour construire des plans d'action réalistes — qui tiennent compte de leurs contraintes, de leurs délais, de leurs ressources. Une recommandation co-construite a dix fois plus de chances d'être mise en œuvre.
+
+Ensuite, le suivi formalisé : chaque recommandation a un owner identifié, une échéance, et une preuve de mise en œuvre attendue. Je maintiens un tracker et je fais des points réguliers — pas pour pointer, mais pour débloquer les obstacles.
+
+Enfin, l'escalade si nécessaire : si une recommandation significative n'est pas mise en œuvre dans les délais sans raison valable, j'escalade. Le management doit être informé des risques résiduels qui restent ouverts. Ma responsabilité est que ces risques soient visibles et tracés.
+
+Chez Carrefour, j'ai accompagné les équipes opérationnelles dans la mise en œuvre des plans d'action sur les notes de frais — pas juste produit le rapport et passé à autre chose."</div>
+    </div>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-f">Q.O5</span><span class="qa-text">Comment faites-vous adhérer des équipes terrain qui ne voient pas l'utilité du contrôle interne ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="script">"La résistance au contrôle interne est presque toujours légitime : les équipes terrain ont des priorités opérationnelles, et le CI peut sembler être une charge supplémentaire sans bénéfice direct pour elles.
+
+Mon approche : je ne vends pas le CI comme une exigence groupe. Je le vends comme un outil de protection pour eux.
+
+Concrètement, ça veut dire adapter le discours à leurs priorités. Avec un directeur de centre auto, je ne parle pas de 'dispositif de maîtrise des risques'. Je lui montre que ce contrôle le protège d'un incident opérationnel pendant sa période de forte activité. Que cette documentation lui évite d'être mis en cause si quelque chose tourne mal. Que ce processus lui permet de déléguer en confiance.
+
+Chez Carrefour, j'ai déployé un self-assessment dans 82 centres en novembre — en plein rush pré-Noël. J'ai obtenu plus de 75% de complétion en deux semaines, parce que j'ai repositionné l'exercice comme un outil pour eux, pas comme un contrôle sur eux. Les 12 findings remontés au Comité Exécutif venaient des équipes terrain elles-mêmes — preuve qu'elles avaient vraiment joué le jeu.
+
+La culture du contrôle ne se décrète pas. Elle se construit par la pédagogie et par la démonstration que le CI est au service des opérationnels, pas l'inverse."</div>
+    </div>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-f">Q.O6</span><span class="qa-text">Qu'est-ce que la conformité extra-financière et quel est son lien avec votre rôle ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="script">"La conformité extra-financière, c'est l'extension du périmètre du contrôle interne aux données non-financières — environnementales, sociales et de gouvernance.
+
+La CSRD — Corporate Sustainability Reporting Directive — impose aux grandes entreprises comme Norauto de publier un reporting ESG annuel, auditable. Ce qui veut dire que les données déclarées doivent être fiables, vérifiables, et contrôlées — exactement comme les données financières.
+
+Concrètement, chez Norauto, ça peut concerner : l'empreinte carbone des centres auto, la consommation d'énergie, la politique de gestion des déchets, les conditions de travail dans la chaîne d'approvisionnement. Toutes ces données doivent être collectées de façon cohérente, contrôlées sur leur exactitude et leur exhaustivité, et reportées de façon défendable.
+
+Mon rôle CI sur ce périmètre : m'assurer que les processus de collecte et de reporting de ces données sont contrôlés — mêmes principes que pour la finance. Existence, exhaustivité, exactitude. Le périmètre change, la méthode reste.
+
+C'est l'une des dimensions qui m'a attirée vers ce poste — c'est l'avenir du contrôle interne."</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     R1 — RH FIT CULTUREL
+══════════════════════════════ -->
+<section class="section" id="rh-profil">
+  <div class="section-head">
+    <span class="sec-tag st-o">R1 — RH</span>
+    <h2>RH en présentiel — Fit culturel & mobilité</h2>
+  </div>
+
+  <div class="pov-banner pov-o">
+    <span class="pov-icon">👁</span>
+    <div class="pov-text">
+      <h3>Perspective RH — Présentiel</h3>
+      <p>L'entretien RH est en présentiel à Villeneuve-d'Ascq. Elle évalue le fit culturel Norauto, ta mobilité, ta motivation pour le secteur, et ta personnalité. L'énergie et la clarté comptent autant que le contenu.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card o">
+      <div class="card-title ct-o">Points de vigilance RH — Présentiel</div>
+      <div class="tl">
+        <div class="tl-item"><div class="tl-label">La mobilité</div><p>Le poste est à Villeneuve-d'Ascq. Tu postules depuis la France. Elle va demander ta situation géographique et ta disponibilité. Sois claire et positive sur ce point.</p></div>
+        <div class="tl-item"><div class="tl-label">L'automobile</div><p>La JD dit "passion de l'automobile ou pas, ce qui compte c'est ton envie de performer". Donc pas besoin de prétendre être passionnée. Mais montre que tu comprends le secteur et ses enjeux.</p></div>
+        <div class="tl-item"><div class="tl-label">La culture Move Factory</div><p>Siège moderne, éco-responsable, collaboratif. Elle cherche quelqu'un qui s'intègre dans cette culture — pas une personnalité trop corporate ou trop rigide.</p></div>
+        <div class="tl-item"><div class="tl-label">Why I leave</div><p>Fin de VIE chez Carrefour Belgium → retour en France → orientation vers un poste permanent en CI/Risk. Logique et cohérent.</p></div>
+      </div>
+    </div>
+    <div class="card f">
+      <div class="card-title ct-f">Norauto — Signaux culturels à intégrer</div>
+      <ul class="chklist">
+        <li><span class="chk" onclick="toggleChk(this)"></span>"Énergie collaborative" — montre que tu travailles bien en équipe transverse</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>"Audace entrepreneuriale" — tu prends des initiatives, tu ne demandes pas la permission pour chaque décision</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>"Engagement responsable" — la dimension RSE/CSRD t'intéresse genuinement</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>"Dynamisme positif" — énergie, enthousiasme — visible en présentiel</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Move Factory — lieu moderne, vélo, éco — tu peux mentionner que ce cadre t'attire</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card o">
+    <div class="card-title ct-o">Salaire — Comment gérer la question</div>
+    <p style="color:var(--ink2);font-size:13px;margin-bottom:10px;">D'après ton tableau Keytrade, tu te situes entre 52 et 58K brut annuel. Pour Norauto International, le niveau est comparable voire légèrement inférieur selon le positionnement.</p>
+    <div class="script gold">"Au vu de mon expérience et du marché français, je me situe autour de 48 à 55K brut annuel, avec une flexibilité selon le package global — avantages, bonus, perspectives d'évolution. Je reste ouverte à la discussion."</div>
+    <div class="alert al-o" style="margin-top:8px;"><strong>// RÈGLE</strong>Ne donne pas un chiffre unique — donne une fourchette. Ne commence pas par le salaire minimum que tu acceptes. Et toujours mentionner la flexibilité selon le package global.</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     R2 — Q&A RH
+══════════════════════════════ -->
+<section class="section" id="rh-qa">
+  <div class="section-head">
+    <span class="sec-tag st-o">R2 — RH</span>
+    <h2>Q&A RH — Réponses scriptées</h2>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-o">Q.R1</span><span class="qa-text">Présentez-vous.</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="script">"J'ai un master en finance bancaire et un peu plus de 5 ans d'expérience en gestion des risques et contrôle interne dans des environnements bancaires et retail.
+
+Mon fil conducteur est assez clair : j'ai toujours travaillé sur la maîtrise du risque, mais sous différents angles. À la Société Générale sur le risque de crédit et la conformité. Chez HSBC en tant que Corporate Relationship Manager — première ligne sur le risque réglementaire pour un portefeuille de clients entreprises. Et chez Carrefour Belgium, où j'ai mené des missions de contrôle interne, des campagnes de self-assessment sur 82 sites à travers le pays, et un reporting direct au Comité Exécutif.
+
+Ce qui m'attire chez Norauto, c'est la dimension réellement internationale du poste — 5 pays, 650 centres — combinée à un département en construction. J'arrive pour structurer et déployer, pas pour maintenir. C'est exactement le type de mission qui me motive."</div>
+    </div>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-o">Q.R2</span><span class="qa-text">Pourquoi Norauto — vous n'avez pas de background automobile ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="script">"La JD le dit elle-même : la passion de l'automobile n'est pas le critère. Ce qui compte, c'est l'envie de performer sur son métier. Et mon métier, c'est le contrôle interne.
+
+Ce qui m'attire chez Norauto, c'est la complexité opérationnelle du périmètre — 650 centres dans 5 pays, des équipes terrain très opérationnelles, une culture à construire. Déployer un framework CI dans ce contexte est une vraie montée en compétences.
+
+Et la dimension 'transition responsable' est un vrai sujet pour moi — la CSRD étend le périmètre du CI vers les données extra-financières. C'est l'avenir du métier, et Norauto est bien placé sur ce sujet avec son positionnement sur la mobilité responsable."</div>
+    </div>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-o">Q.R3</span><span class="qa-text">Pourquoi quittez-vous Carrefour Belgium ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="script">"Ma mission chez Carrefour Belgium était un VIE — Volontariat International en Entreprise — qui arrive à son terme naturel. C'est le bon moment pour m'orienter vers un poste permanent, en France, avec une vraie spécialisation en contrôle interne.
+
+Carrefour Belgium m'a donné une expérience très riche — j'ai piloté des missions de A à Z, j'ai reporté au Comité Exécutif, j'ai déployé des dispositifs sur un réseau multi-sites. Maintenant je veux exercer ces compétences dans un périmètre plus large et sur la durée."</div>
+    </div>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-o">Q.R4</span><span class="qa-text">Où vous voyez-vous dans 3 ans ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="script">"Dans 3 ans, j'ambitionne d'être la référence CI de Norauto International — quelqu'un que les équipes dans les 5 pays viennent consulter spontanément quand elles ont un doute sur leurs processus ou leurs contrôles.
+
+Concrètement : avoir déployé un framework cohérent sur les pays prioritaires, avoir contribué à la mise en conformité CSRD, et idéalement avoir élargi mon périmètre vers d'autres dimensions de la conformité — compliance, risques extra-financiers.
+
+Norauto est une organisation en croissance sur ces sujets — c'est exactement le contexte dans lequel je veux construire mon expertise sur la durée."</div>
+    </div>
+  </div>
+
+  <div class="qa" onclick="toggleQA(this)">
+    <div class="qa-q"><span class="qa-num qn-o">Q.R5</span><span class="qa-text">Quels sont vos points d'amélioration ?</span><span class="qa-chev">▾</span></div>
+    <div class="qa-body">
+      <div class="alert al-o" style="margin-top:0;"><strong>// RÈGLE</strong>Un vrai point d'amélioration — pas une fausse qualité déguisée. Et toujours ce que tu fais pour progresser.</div>
+      <div class="script">"Je travaille activement mon néerlandais — dans un contexte belge et potentiellement avec des équipes Benelux, c'est un axe de progression concret.
+
+Et sur le fond métier : le périmètre extra-financier — CSRD, reporting ESG — est un domaine sur lequel je me forme activement. Je maîtrise les principes du contrôle interne sur les données financières ; j'étends maintenant cette expertise aux données non-financières.
+
+C'est d'ailleurs l'une des raisons pour lesquelles ce poste m'intéresse — il me permettra de développer cette expertise en conditions réelles."</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     STARS
+══════════════════════════════ -->
+<section class="section" id="stars">
+  <div class="section-head">
+    <span class="sec-tag st-f">STAR</span>
+    <h2>3 exemples STAR — Adaptés Norauto</h2>
+  </div>
+
+  <div class="alert al-f">
+    <strong>// USAGE</strong>
+    Ces 3 STAR couvrent les 3 dimensions clés du rôle Norauto : déploiement multi-sites + culture du contrôle, identification d'un risque caché, autonomie sous pression. Utilise-les selon la question posée.
+  </div>
+
+  <!-- STAR 1 -->
+  <div class="star-block" onclick="toggleStar(this)">
+    <div class="star-head">
+      <span class="star-label">STAR 1</span>
+      <span class="star-title">Déploiement multi-sites & culture du contrôle — 82 POS Carrefour</span>
+      <span class="star-chev">▾</span>
+    </div>
+    <div class="star-body">
+      <div class="alert al-s" style="margin-top:0;"><strong>// QUAND L'UTILISER</strong>"Comment faites-vous adhérer des équipes terrain ?" / "Déploiement multi-sites — donnez un exemple" / "Culture du contrôle"</div>
+      <div class="star-step">S — Situation</div>
+      <div class="script">Self assessment in 82 POS in November, just before the peak activity period</div>
+      <div class="star-step">T — Task</div>
+      <div class="script">Maximum of answers from the stores directors within 2 weeks at the very beginning of the peak activity period</div>
+      <div class="star-step">A — Action</div>
+      <div class="script">1) Organisation of a kick off in order to explain the context
+2) Adaptation of my speech to the store director's priorities — I showed them that it was to protect them from operational incidents — not to check any abstract boxes of "risk management". To resume: I spoke their language</div>
+      <div class="star-step">R — Result</div>
+      <div class="script">+75% of stores participated
+Around 12 findings presented to the executive committee and urgent corrective actions has been made</div>
+    </div>
+  </div>
+
+  <!-- STAR 2 -->
+  <div class="star-block" onclick="toggleStar(this)">
+    <div class="star-head">
+      <span class="star-label">STAR 2</span>
+      <span class="star-title">Identification d'un risque caché & recommandations structurées — Notes de frais</span>
+      <span class="star-chev">▾</span>
+    </div>
+    <div class="star-body">
+      <div class="alert al-s" style="margin-top:0;"><strong>// QUAND L'UTILISER</strong>"Donnez un exemple d'évaluation de l'efficacité d'un contrôle" / "Exemple d'identification d'un risque" / "Vos recommandations — comment vous les formulez ?"</div>
+      <div class="star-step">S — Situation</div>
+      <div class="script">Expense report mission (approx. 200 employees) at Carrefour Belgium</div>
+      <div class="star-step">T — Task</div>
+      <div class="script">The objective was to assess the effectiveness of the risk management framework and identify weaknesses in the control of this process.</div>
+      <div class="star-step">A — Action</div>
+      <div class="script">Including the analysis of the control framework, sample testing and data analysis = highlighted weaknesses in the validation controls, insufficiently robust. The analysis revealed approximately 15% of non-compliant expenses, representing an estimated financial exposure of €80K annually.
+Root cause analysis to understand the nature of the dysfunctions — whether they were systemic.
+
+On that basis, I formulated structured recommendations: strengthening of validation rules, addition of a complementary control level (SOD) and clarification of roles and responsibilities (RACI). I supported the operational teams in the implementation of the action plans.</div>
+      <div class="star-step">R — Result</div>
+      <div class="script">Controls were strengthened and monitoring indicators were put in place to steer the process. This led to a significant reduction in non-compliant expenses and an overall improvement in the level of risk control over the process.</div>
+    </div>
+  </div>
+
+  <!-- STAR 3 -->
+  <div class="star-block" onclick="toggleStar(this)">
+    <div class="star-head">
+      <span class="star-label">STAR 3</span>
+      <span class="star-title">Autonomie & pression — SAQ été seule</span>
+      <span class="star-chev">▾</span>
+    </div>
+    <div class="star-body">
+      <div class="alert al-s" style="margin-top:0;"><strong>// QUAND L'UTILISER</strong>"Donnez un exemple de gestion de plusieurs priorités sous pression" / "Exemple d'autonomie" / "Situation difficile — comment vous l'avez gérée ?"</div>
+      <div class="star-step">S — Situation</div>
+      <div class="script">Single-handed management of the self-assessment campaign: 15 departments + 300 questions to distribute + in the middle of summer — both my managers were absent simultaneously the entire summer, and the respondents themselves were partially on holiday.</div>
+      <div class="star-step">T — Task</div>
+      <div class="script">SAQ campaign = the most important for Carrefour BE -> our results are challenged by the group & our external auditors. So no error margin + no postponing on the deadline</div>
+      <div class="star-step">A — Action</div>
+      <div class="script">I structured my work in 3 levels:
+1. Coordination of the respondents — even though it was the summer break I ensured that all the departments or participants were collecting their proofs and answered during their allowed time. I did follow up with them if needed
+2. Proof analysis and challenging on my own in order to accept them or identify insufficiency
+3. If I did find insufficiency, remediation with the owners by an exchange with them or if on holiday with someone relevant in the same team. Sometimes it was needed to write an action plan so I did my best to support them in this task. All of that alone within the deadline</div>
+      <div class="star-step">R — Result</div>
+      <div class="script">Campaign has been delivered on time with coherent answers and our framework has been qualified "Robust" which is the highest qualification. Also internal auditors received all what they expected</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     MAPPING
+══════════════════════════════ -->
+<section class="section" id="mapping">
+  <div class="section-head">
+    <span class="sec-tag st-f">F1</span>
+    <h2>Mapping profil → JD</h2>
+  </div>
+
+  <div class="card">
+    <div class="jd-body" style="padding:0;">
+      <div class="match-row" style="padding-top:6px;"><span class="mt mt-m">MUST</span><span class="match-jd">Déployer et harmoniser le CI selon les standards groupe</span><span class="match-arr">→</span><span class="match-you">"Déploiement self-assessment 82 POS Carrefour — même logique : standard groupe à déployer sur un réseau multi-sites avec des équipes opérationnelles résistantes"</span></div>
+      <div class="match-row"><span class="mt mt-m">MUST</span><span class="match-jd">Cartographie des risques</span><span class="match-arr">→</span><span class="match-you">"Campagnes macro/micro sur 30 départements Carrefour — identification, évaluation probabilité × impact, priorisation, plans d'action"</span></div>
+      <div class="match-row"><span class="mt mt-m">MUST</span><span class="match-jd">Évaluer l'efficacité des dispositifs</span><span class="match-arr">→</span><span class="match-you">"Mission notes de frais : analyse du dispositif, tests sur échantillon, analyse de données — 15% non-conformes, 80K€ identifiés"</span></div>
+      <div class="match-row"><span class="mt mt-m">MUST</span><span class="match-jd">Suivre les plans d'action</span><span class="match-arr">→</span><span class="match-you">"SAQ Carrefour : suivi jusqu'à clôture, tracker, escalade si nécessaire — qualification Robust par les auditeurs"</span></div>
+      <div class="match-row"><span class="mt mt-m">MUST</span><span class="match-jd">Sensibiliser et accompagner les équipes</span><span class="match-arr">→</span><span class="match-you">"82 directeurs de magasin convaincus en 2 semaines — repositionnement du CI comme outil de protection, pas de contrôle"</span></div>
+      <div class="match-row"><span class="mt mt-g">GOOD</span><span class="match-jd">Contribuer à la compliance</span><span class="match-arr">→</span><span class="match-you">"SAPIN II Carrefour (anti-corruption), KYC/CDD HSBC (conformité réglementaire) — familière avec les programmes compliance"</span></div>
+      <div class="match-row"><span class="mt mt-g">GOOD</span><span class="match-jd">Environnement multi-sites ou international</span><span class="match-arr">→</span><span class="match-you">"82 POS Belgique + HSBC context international + enseignement du français en freelance = adaptation à des contextes culturels variés"</span></div>
+      <div class="match-row" style="padding-bottom:6px;"><span class="mt" style="background:var(--ochre-dim);color:var(--ochre);border:1px solid var(--ochre-line);">GÉR.</span><span class="match-jd">Bon niveau d'anglais</span><span class="match-arr">→</span><span class="match-you">"Courant — expérience Canada, HSBC, Carrefour Belgium (environnement bilingue). Naturel en contexte professionnel."</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     ENGLISH KIT
+══════════════════════════════ -->
+<section class="section" id="english">
+  <div class="section-head">
+    <span class="sec-tag st-s">EN</span>
+    <h2>🇬🇧 English Kit — Périmètre international</h2>
+  </div>
+
+  <div class="card sl">
+    <div class="card-title ct-sl">Pourquoi préparer l'anglais</div>
+    <p style="color:var(--ink2);font-size:13px;">La JD dit "bon niveau d'anglais" et le périmètre couvre l'Italie, l'Espagne et le Portugal. L'entretien peut basculer en anglais avec Olivier Reynaert pour tester ton niveau réel.</p>
+  </div>
+
+  <div class="en-block" onclick="toggleEN(this)">
+    <div class="en-block-head"><span class="ql">EN.01</span><span class="qt">Tell me about yourself.</span><span class="chev">▾</span></div>
+    <div class="en-block-body">
+      <div class="script en">"I hold a master's degree in banking and finance, and I have just over five years of experience built around one consistent thread: risk management and internal control, from different angles.
+
+I started at Société Générale in credit risk analysis and client compliance. At HSBC, as a Corporate Relationship Manager, I was first line of defence on a corporate client portfolio — responsible for regulatory risk management and counterparty assessment through KYC and CDD processes. Then I moved into internal control at Carrefour Belgium, where I ran risk assessment campaigns across 30 departments, deployed a self-assessment framework across 82 retail sites, and reported key findings directly to the Executive Committee.
+
+What draws me to Norauto is the combination of a genuinely international scope — five countries, 650 centres — and a department that is being built. I'm coming to structure and deploy, not to maintain. That's exactly the type of mission I want to invest in."</div>
+    </div>
+  </div>
+
+  <div class="en-block" onclick="toggleEN(this)">
+    <div class="en-block-head"><span class="ql">EN.02</span><span class="qt">How would you deploy an internal control framework across 5 countries?</span><span class="chev">▾</span></div>
+    <div class="en-block-body">
+      <div class="script en">"I would structure this in three phases.
+
+First, understanding: before deploying anything, I rely on local teams to understand existing processes, perceived risks, and country-specific regulatory constraints. You can't harmonise what you don't understand.
+
+Second, prioritisation: I build a consolidated risk mapping — which processes are common across the five countries, and where are the highest risks? Those processes get the harmonised control framework first.
+
+Third, adapted deployment: the group standard stays the same — that's the substance. But the form adapts. The way you present a control framework to an Italian store team is different from how you present it to a French corporate team. I applied this logic at Carrefour Belgium across 82 sites — adapting the message without compromising the requirement.
+
+And in each country, I identify local relays — middle managers who can carry the message on the ground. Internal control doesn't deploy from a headquarters desk without local ambassadors."</div>
+    </div>
+  </div>
+
+  <div class="en-block" onclick="toggleEN(this)">
+    <div class="en-block-head"><span class="ql">EN.03</span><span class="qt">What is a good internal control?</span><span class="chev">▾</span></div>
+    <div class="en-block-body">
+      <div class="script en">"A good internal control has four characteristics.
+
+It mitigates a clearly identified risk — not a theoretical one, but a risk that has been assessed and prioritised.
+
+It is well designed and effective in practice — meaning it actually works on the ground, not just on paper. The gap between design and execution is where most control failures happen.
+
+It is consistently applied and monitored — a control that works 80% of the time provides 80% protection, not 100%.
+
+And it is simple, proportionate, and sustainable — a control that is too complex or too burdensome will be bypassed. The best controls are the ones that become part of the natural workflow."</div>
+    </div>
+  </div>
+
+  <div class="en-block" onclick="toggleEN(this)">
+    <div class="en-block-head"><span class="ql">EN.04</span><span class="qt">Why Norauto?</span><span class="chev">▾</span></div>
+    <div class="en-block-body">
+      <div class="script en">"Three concrete reasons.
+
+The international scope: five countries, 650 centres, genuinely diverse operational teams. Deploying an internal control framework in that context is a real challenge — and a real opportunity to build expertise.
+
+The department is being built: I'm not arriving to maintain a mature system. I'm arriving to structure it. That's the type of mission that motivates me — where my contribution is visible and where I have room to shape the approach.
+
+And the extra-financial dimension: CSRD is extending the perimeter of internal control to non-financial data. Norauto's positioning on responsible mobility makes this particularly relevant. It's where the profession is heading, and I want to be part of building it."</div>
+    </div>
+  </div>
+
+  <div class="card sl">
+    <div class="card-title ct-sl">Vocabulaire CI clé en anglais</div>
+    <table>
+      <thead><tr><th>Terme EN</th><th>Terme FR</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Internal Control</strong></td><td>Contrôle interne</td></tr>
+        <tr><td><strong>Risk Mapping / Risk Assessment</strong></td><td>Cartographie des risques</td></tr>
+        <tr><td><strong>Control Framework</strong></td><td>Dispositif de contrôle interne</td></tr>
+        <tr><td><strong>Key Control</strong></td><td>Contrôle clé</td></tr>
+        <tr><td><strong>Walkthrough</strong></td><td>Revue de procédure bout en bout</td></tr>
+        <tr><td><strong>Sample Testing</strong></td><td>Test sur échantillon</td></tr>
+        <tr><td><strong>Finding / Deficiency</strong></td><td>Finding / Défaillance</td></tr>
+        <tr><td><strong>Remediation Plan</strong></td><td>Plan d'action / Plan de remédiation</td></tr>
+        <tr><td><strong>Self-Assessment</strong></td><td>Auto-évaluation / Self-assessment</td></tr>
+        <tr><td><strong>Segregation of Duties (SoD)</strong></td><td>Séparation des tâches</td></tr>
+        <tr><td><strong>RACI</strong></td><td>RACI (Responsible, Accountable, Consulted, Informed)</td></tr>
+        <tr><td><strong>Root Cause Analysis</strong></td><td>Analyse des causes racines</td></tr>
+        <tr><td><strong>Three Lines of Defence</strong></td><td>Trois lignes de défense</td></tr>
+        <tr><td><strong>Non-financial reporting / ESG</strong></td><td>Reporting extra-financier / RSE</td></tr>
+        <tr><td><strong>Compliance</strong></td><td>Conformité</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     CONCEPTS CLÉS CI
+══════════════════════════════ -->
+<section class="section" id="concepts">
+  <div class="section-head">
+    <span class="sec-tag st-f">C1</span>
+    <h2>Concepts clés — Définitions à maîtriser</h2>
+  </div>
+
+  <div class="alert al-f"><strong>// POURQUOI CETTE SECTION</strong>Olivier Reynaert va tester tes définitions. Une réponse floue sur un concept de base = signal de manque de rigueur. Ces définitions doivent sortir naturellement, pas être récitées.</div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Contrôle interne — Définition de référence</div>
+    <p style="color:var(--ink2);font-size:13px;margin-bottom:10px;">Le contrôle interne est un processus mis en œuvre par le conseil d'administration, la direction et le personnel d'une organisation, conçu pour fournir une assurance raisonnable quant à la réalisation des objectifs dans les catégories suivantes :</p>
+    <div class="g3">
+      <div class="card f" style="margin:0;">
+        <div class="card-title ct-f">Efficacité opérationnelle</div>
+        <p style="color:var(--ink2);font-size:12.5px;">Les opérations sont efficaces et efficientes — les ressources sont utilisées de façon optimale.</p>
+      </div>
+      <div class="card s" style="margin:0;">
+        <div class="card-title ct-s">Fiabilité du reporting</div>
+        <p style="color:var(--ink2);font-size:12.5px;">Les états financiers et extra-financiers sont fiables, complets et exacts.</p>
+      </div>
+      <div class="card o" style="margin:0;">
+        <div class="card-title ct-o">Conformité aux lois</div>
+        <p style="color:var(--ink2);font-size:12.5px;">Les lois, réglementations et politiques internes sont respectées.</p>
+      </div>
+    </div>
+    <div class="alert al-f" style="margin-top:12px;"><strong>// FORMULATION EN ENTRETIEN</strong>"Le contrôle interne, c'est l'ensemble des dispositifs mis en place pour s'assurer que l'organisation atteint ses objectifs de façon efficace, que ses données sont fiables, et qu'elle respecte les règles qui s'appliquent à elle. Ce n'est pas une fin en soi — c'est un levier de performance et de sécurité."</div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Glossaire des concepts fondamentaux</div>
+    <table>
+      <thead><tr><th>Concept</th><th>Définition précise</th><th>Exemple concret Norauto</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Risque brut / Risque inhérent</strong></td>
+          <td>Niveau de risque avant prise en compte des contrôles existants. Le risque "naturel" d'un processus si rien n'était fait.</td>
+          <td>Risque de fraude sur les notes de frais si aucune procédure d'approbation n'existe</td>
+        </tr>
+        <tr>
+          <td><strong>Risque résiduel</strong></td>
+          <td>Niveau de risque après application des contrôles. Ce qui reste malgré les dispositifs en place.</td>
+          <td>Même avec une procédure d'approbation, un manager peut approuver des dépenses non conformes → risque résiduel</td>
+        </tr>
+        <tr>
+          <td><strong>Appétit pour le risque</strong></td>
+          <td>Niveau de risque qu'une organisation est prête à accepter pour atteindre ses objectifs. Défini par la direction.</td>
+          <td>Norauto peut accepter un risque opérationnel faible sur les caisses mais un risque nul sur la sécurité des clients</td>
+        </tr>
+        <tr>
+          <td><strong>Tolérance au risque</strong></td>
+          <td>Variation acceptable autour de l'appétit pour le risque. Plus précis et opérationnel que l'appétit.</td>
+          <td>"Tolérance de 2% d'écart sur les encaissements" — au-delà = escalade</td>
+        </tr>
+        <tr>
+          <td><strong>Contrôle préventif</strong></td>
+          <td>Contrôle qui empêche une erreur ou une fraude de se produire. Agit avant l'événement.</td>
+          <td>Validation hiérarchique obligatoire avant tout remboursement de note de frais</td>
+        </tr>
+        <tr>
+          <td><strong>Contrôle détectif</strong></td>
+          <td>Contrôle qui détecte une erreur ou une fraude après qu'elle s'est produite. Agit après l'événement.</td>
+          <td>Analyse mensuelle des dépenses par catégorie — permet de repérer des anomalies a posteriori</td>
+        </tr>
+        <tr>
+          <td><strong>Contrôle correctif</strong></td>
+          <td>Contrôle qui corrige une erreur détectée et évite sa récurrence.</td>
+          <td>Plan d'action pour renforcer les règles de validation après détection de dépenses non conformes</td>
+        </tr>
+        <tr>
+          <td><strong>Séparation des tâches (SoD)</strong></td>
+          <td>Principe selon lequel les tâches critiques d'un processus sont réparties entre plusieurs personnes pour éviter fraude et erreur.</td>
+          <td>La personne qui saisit une commande ne doit pas être celle qui l'approuve, ni celle qui effectue le paiement</td>
+        </tr>
+        <tr>
+          <td><strong>Piste d'audit</strong></td>
+          <td>Traçabilité complète des actions, modifications et approbations permettant de reconstituer un événement.</td>
+          <td>Historique des modifications dans le système de caisse — qui a fait quoi, quand, avec quelle autorisation</td>
+        </tr>
+        <tr>
+          <td><strong>Matérialité / Seuil de signification</strong></td>
+          <td>Seuil en dessous duquel une erreur ou une anomalie est jugée non significative pour la décision. Au-dessus = escalade obligatoire.</td>
+          <td>Un écart de 50€ n'est pas matériel. Un écart de 5 000€ sur une caisse = investigation immédiate</td>
+        </tr>
+        <tr>
+          <td><strong>Finding / Défaillance</strong></td>
+          <td>Faiblesse identifiée dans le dispositif de contrôle — soit en conception (le contrôle n'est pas bien conçu) soit en exécution (le contrôle n'est pas appliqué).</td>
+          <td>"Contrôle de validation des remises documenté mais jamais exécuté" = défaillance d'exécution</td>
+        </tr>
+        <tr>
+          <td><strong>Assertion financière</strong></td>
+          <td>Affirmation implicite sur un élément des états financiers. Les 5 assertions : existence, exhaustivité, évaluation, droits & obligations, présentation.</td>
+          <td>Un contrôle sur les stocks adresse l'assertion "existence" — les stocks enregistrés existent réellement</td>
+        </tr>
+        <tr>
+          <td><strong>RCSA (Risk & Control Self-Assessment)</strong></td>
+          <td>Processus par lequel les équipes opérationnelles évaluent elles-mêmes leurs risques et leurs contrôles, guidées par un questionnaire structuré.</td>
+          <td>Carrefour : self-assessment sur 82 POS = RCSA appliqué à un réseau retail</td>
+        </tr>
+        <tr>
+          <td><strong>KPI vs. KRI</strong></td>
+          <td>KPI (Key Performance Indicator) mesure la performance. KRI (Key Risk Indicator) mesure le niveau de risque — signal d'alerte avant l'incident.</td>
+          <td>KPI : taux de satisfaction client. KRI : nombre de réclamations en hausse de 20% = signal de risque opérationnel</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="g2">
+    <div class="card f">
+      <div class="card-title ct-f">Processus vs. Contrôle — La distinction fondamentale</div>
+      <p style="color:var(--ink2);font-size:13px;margin-bottom:10px;">Un <strong>processus</strong> est la séquence d'activités qui produit un résultat. Un <strong>contrôle</strong> est une action spécifique au sein du processus qui réduit un risque identifié.</p>
+      <div class="script" style="font-size:11.5px;">Processus : gestion des notes de frais
+→ Étape 1 : le collaborateur saisit sa dépense
+→ Étape 2 : le manager valide (CONTRÔLE préventif)
+→ Étape 3 : la comptabilité traite
+→ Étape 4 : analyse mensuelle des écarts (CONTRÔLE détectif)</div>
+      <p style="color:var(--ink3);font-size:12px;margin-top:8px;">Un finding sur le contrôle ne remet pas en cause le processus — mais un processus mal conçu génère des risques que les contrôles ne peuvent pas tous couvrir.</p>
+    </div>
+    <div class="card s">
+      <div class="card-title ct-s">Efficacité de conception vs. efficacité opérationnelle</div>
+      <div class="tl">
+        <div class="tl-item"><div class="tl-label">Design effectiveness</div><p>Le contrôle est-il bien conçu pour adresser le risque visé ? Est-ce la bonne réponse au bon risque ?</p></div>
+        <div class="tl-item"><div class="tl-label">Operating effectiveness</div><p>Le contrôle fonctionne-t-il vraiment en pratique ? Est-il exécuté, par la bonne personne, au bon moment, avec la preuve attendue ?</p></div>
+        <div class="tl-item"><div class="tl-label">Le piège classique</div><p>Un contrôle bien conçu mais jamais exécuté = défaillance opérationnelle. Chez Carrefour : plusieurs contrôles documentés depuis des années, jamais réellement appliqués.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">La cartographie des risques — Matrice probabilité × impact</div>
+    <p style="color:var(--ink2);font-size:13px;margin-bottom:12px;">L'outil central du contrôle interne. Elle permet de visualiser et prioriser les risques selon deux axes.</p>
+    <table>
+      <thead><tr><th>Zone</th><th>Probabilité</th><th>Impact</th><th>Traitement</th></tr></thead>
+      <tbody>
+        <tr><td><strong style="color:var(--wine);">Zone rouge — Risque élevé</strong></td><td>Forte</td><td>Fort</td><td>Contrôles renforcés, traitement prioritaire, escalade direction</td></tr>
+        <tr><td><strong style="color:var(--ochre);">Zone orange — Risque modéré</strong></td><td>Forte / Faible</td><td>Faible / Fort</td><td>Contrôles standards, monitoring régulier</td></tr>
+        <tr><td><strong style="color:var(--sage);">Zone verte — Risque faible</strong></td><td>Faible</td><td>Faible</td><td>Acceptation ou contrôle allégé</td></tr>
+      </tbody>
+    </table>
+    <div class="alert al-f" style="margin-top:10px;"><strong>// FORMULATION EN ENTRETIEN</strong>"La cartographie des risques ne sert pas à tout contrôler — elle sert à concentrer les efforts là où le risque résiduel est le plus élevé. Avec 650 centres dans 5 pays, la priorité c'est d'abord les risques rouges."</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     DÉFINITIONS DES RISQUES
+══════════════════════════════ -->
+<section class="section" id="risques">
+  <div class="section-head">
+    <span class="sec-tag st-f">C2</span>
+    <h2>Définitions des risques — Taxonomie complète</h2>
+  </div>
+
+  <div class="alert al-f"><strong>// POURQUOI CETTE SECTION</strong>Olivier Reynaert est Directeur Risques. Si tu confonds risque opérationnel et risque de crédit, ou si tu ne sais pas définir la conformité — c'est éliminatoire. Ces définitions doivent être fluides.</div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Le risque opérationnel — TON TERRAIN PRINCIPAL</div>
+    <p style="color:var(--ink2);font-size:13px;margin-bottom:10px;"><strong>Définition de référence (ISO 31000 / usage commun) :</strong> "Risque de pertes résultant de carences ou de défauts attribuables à des procédures, personnels et systèmes internes ou à des événements extérieurs."</p>
+    <div class="alert al-t" style="margin-bottom:12px;"><strong>// NOTE IMPORTANTE</strong>Cette définition est issue du monde bancaire (Bâle II) mais est devenue la référence universelle du risk management — y compris hors secteur financier. Norauto n'est pas soumise à Bâle II, mais utilise ce cadre conceptuel comme référence méthodologique. Si Olivier Reynaert te demande : "La définition est issue du monde bancaire mais est désormais standard dans le risk management en général — c'est le cadre conceptuel que j'utilise, pas une obligation réglementaire applicable à Norauto."</div>
+    <div class="g2">
+      <div>
+        <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong style="color:var(--forest);">Les catégories principales chez Norauto :</strong></p>
+        <ul style="padding-left:16px;color:var(--ink2);font-size:12.5px;line-height:1.9;">
+          <li>Fraude interne (remises non autorisées, détournements)</li>
+          <li>Fraude externe (escroqueries clients, cyberattaques)</li>
+          <li>Erreurs d'exécution des processus (caisses, stocks, commandes)</li>
+          <li>Défaillances systèmes (panne ERP, système de caisse)</li>
+          <li>Événements externes (incendie centre, catastrophe naturelle)</li>
+          <li>Non-conformité réglementaire (SAPIN II, RGPD, sécurité)</li>
+        </ul>
+      </div>
+      <div>
+        <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong style="color:var(--forest);">Chez Norauto — exemples concrets :</strong></p>
+        <ul style="padding-left:16px;color:var(--ink2);font-size:12.5px;line-height:1.9;">
+          <li>Erreur de caisse non détectée = erreur d'exécution des processus</li>
+          <li>Fraude sur remises = fraude interne</li>
+          <li>Panne du système de gestion des stocks = défaillance systèmes</li>
+          <li>Accident client dans un centre = événement lié aux personnes</li>
+          <li>Non-respect d'une réglementation locale = non-conformité</li>
+        </ul>
+      </div>
+    </div>
+    <div class="alert al-f" style="margin-top:10px;"><strong>// FORMULATION EN ENTRETIEN</strong>"Mon rôle est dans le risque opérationnel — pas le risque stratégique ou financier. Concrètement : s'assurer que les processus fonctionnent correctement, que les personnes font ce qu'elles sont censées faire, et que les systèmes produisent des données fiables. Dans un réseau de 650 centres, ce sont des enjeux quotidiens."</div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Le risque de conformité / compliance</div>
+    <p style="color:var(--ink2);font-size:13px;margin-bottom:10px;"><strong>Définition :</strong> Risque de sanction légale, financière ou de réputation auquel une organisation est exposée en cas de non-respect des lois, règlements, codes et normes applicables à son activité.</p>
+    <div class="g2">
+      <div>
+        <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong style="color:var(--forest);">Sources du risque de conformité chez Norauto :</strong></p>
+        <div class="tl" style="margin:0;">
+          <div class="tl-item"><div class="tl-label">SAPIN II</div><p>Loi française anticorruption. Impose un programme anticorruption, une cartographie des risques de corruption, un code de conduite, et des procédures d'alerte. Applicable à Norauto International.</p></div>
+          <div class="tl-item"><div class="tl-label">RGPD / GDPR</div><p>Règlement européen sur la protection des données personnelles. 650 centres avec des données clients = exposition significative. Contrôles sur la collecte, le traitement et la conservation.</p></div>
+          <div class="tl-item"><div class="tl-label">CSRD</div><p>Corporate Sustainability Reporting Directive. Reporting ESG obligatoire et auditable. Données extra-financières à contrôler comme les données financières.</p></div>
+          <div class="tl-item"><div class="tl-label">Droit du travail / sécurité</div><p>Réglementations sur la santé et sécurité au travail — variables selon les 5 pays. Non-conformité = sanctions + risque réputationnel.</p></div>
+        </div>
+      </div>
+      <div>
+        <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong style="color:var(--forest);">Différence risque opérationnel vs. risque de conformité :</strong></p>
+        <div class="card" style="margin:0;background:var(--bg2);">
+          <p style="color:var(--ink2);font-size:12.5px;margin-bottom:8px;"><strong>Risque opérationnel :</strong> une erreur de caisse non détectée = perte financière directe.</p>
+          <p style="color:var(--ink2);font-size:12.5px;margin-bottom:8px;"><strong>Risque de conformité :</strong> la même erreur, si elle révèle une absence de contrôle systémique, peut constituer une violation réglementaire → sanction.</p>
+          <p style="color:var(--ink3);font-size:12px;font-style:italic;">Les deux se superposent souvent. Un incident opérationnel peut déclencher un risque de conformité si la réglementation impose des contrôles spécifiques.</p>
+        </div>
+        <div class="alert al-s" style="margin-top:10px;"><strong>// FORMULATION EN ENTRETIEN</strong>"Le risque de conformité, c'est le risque qu'une règle externe ne soit pas respectée — loi, régulation, norme sectorielle. Mon rôle CI y contribue : en s'assurant que les processus sont conformes, on protège l'organisation des sanctions et de l'atteinte à la réputation."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Les autres risques — Savoir les situer</div>
+    <table>
+      <thead><tr><th>Type de risque</th><th>Définition courte</th><th>Lien avec le rôle CI</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Risque stratégique</strong></td>
+          <td>Risque que la stratégie choisie ne produise pas les résultats attendus ou soit inadaptée au contexte</td>
+          <td>Hors périmètre direct CI — mais les décisions stratégiques créent des risques opérationnels à anticiper</td>
+        </tr>
+        <tr>
+          <td><strong>Risque financier</strong></td>
+          <td>Risque de perte financière lié à la trésorerie, aux taux, aux changes</td>
+          <td>Hors périmètre CI — géré par la Finance/Trésorerie. Le CI s'assure de la fiabilité des données financières, pas de la gestion des positions</td>
+        </tr>
+        <tr>
+          <td><strong>Risque de réputation</strong></td>
+          <td>Risque d'atteinte à l'image de l'organisation résultant d'un incident</td>
+          <td>Conséquence souvent d'un risque opérationnel ou de conformité mal géré. Le CI contribue à le prévenir en amont</td>
+        </tr>
+        <tr>
+          <td><strong>Risque extra-financier / ESG</strong></td>
+          <td>Risques liés aux enjeux environnementaux, sociaux et de gouvernance — dont CSRD</td>
+          <td>Dans la JD Norauto. Le CI doit s'assurer que les données ESG déclarées sont fiables et contrôlées</td>
+        </tr>
+        <tr>
+          <td><strong>Risque de fraude</strong></td>
+          <td>Risque d'acte délibéré visant à tromper ou à détourner des ressources — interne ou externe</td>
+          <td>Sous-catégorie du risque opérationnel. Adressé par la séparation des tâches, les contrôles d'accès, et les analyses d'anomalies</td>
+        </tr>
+        <tr>
+          <td><strong>Risque IT / cybersécurité</strong></td>
+          <td>Risque de défaillance des systèmes d'information ou d'attaque externe</td>
+          <td>Périmètre CI sur la fiabilité des données produites par les systèmes. La cybersécurité stricte est gérée par l'IT Security</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card s">
+    <div class="card-title ct-s">La phrase qui distingue le CI du Risk Management</div>
+    <div class="script">"Le risk management identifie et évalue les risques. Le contrôle interne met en place et vérifie les dispositifs pour les maîtriser. Les deux se complètent — le CI est le bras opérationnel du risk management au niveau des processus."</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     FORMULATIONS DE RECOMMANDATIONS
+══════════════════════════════ -->
+<section class="section" id="recommandations">
+  <div class="section-head">
+    <span class="sec-tag st-f">C3</span>
+    <h2>Formulations de recommandations — Exemples concrets</h2>
+  </div>
+
+  <div class="alert al-f"><strong>// POURQUOI CETTE SECTION</strong>La JD dit "proposer des recommandations pour renforcer la maîtrise des risques et la conformité." Olivier Reynaert peut te demander de lui montrer comment tu formules une recommandation. C'est un test de rigueur et de communication.</div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Structure d'une recommandation — Le format standard</div>
+    <p style="color:var(--ink2);font-size:13px;margin-bottom:12px;">Une recommandation efficace répond à 5 questions dans l'ordre :</p>
+    <div class="g2">
+      <div class="tl">
+        <div class="tl-item"><div class="tl-label">1. Constat (What)</div><p>Qu'est-ce qui a été observé ? Fait objectif, pas jugement. Avec référence à la preuve ou à l'échantillon.</p></div>
+        <div class="tl-item"><div class="tl-label">2. Risque associé (So what)</div><p>Quel est l'impact si ce constat n'est pas adressé ? Financier, opérationnel, réglementaire, réputationnel ?</p></div>
+        <div class="tl-item"><div class="tl-label">3. Cause racine (Why)</div><p>Pourquoi ce constat existe-t-il ? Process mal conçu, manque de formation, manque de ressources, contrôle absent ?</p></div>
+      </div>
+      <div class="tl">
+        <div class="tl-item"><div class="tl-label">4. Recommandation (How)</div><p>Quelle action corrective est recommandée ? Spécifique, réalisable, mesurable. Distinguer les quick wins des actions de fond.</p></div>
+        <div class="tl-item"><div class="tl-label">5. Priorité & délai (When)</div><p>Quelle est l'urgence ? Critique (immédiat), Haute (3 mois), Moyenne (6 mois), Faible (1 an).</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Exemple 1 — Recommandation sur les notes de frais (ton exemple Carrefour)</div>
+    <div class="card" style="margin:0;background:var(--bg2);border-left:3px solid var(--wine);">
+      <div class="card-title ct-w">Constat</div>
+      <p style="color:var(--ink2);font-size:13px;">L'analyse de l'échantillon des notes de frais du T3 2024 (200 collaborateurs, 450 dépenses testées) révèle que 15% des dépenses ne disposent pas de justificatif conforme ou ont été approuvées par le même collaborateur que celui qui les a initiées. Cette situation représente une exposition financière estimée à 80 000€ annuels.</p>
+    </div>
+    <div class="card" style="margin:8px 0 0;background:var(--bg2);border-left:3px solid var(--ochre);">
+      <div class="card-title ct-o">Risque associé</div>
+      <p style="color:var(--ink2);font-size:13px;">Risque de fraude interne par absence de séparation des tâches. Risque financier direct (dépenses non éligibles remboursées). Risque de conformité (politique interne de dépenses non respectée).</p>
+    </div>
+    <div class="card" style="margin:8px 0 0;background:var(--bg2);border-left:3px solid var(--sage);">
+      <div class="card-title ct-s">Cause racine</div>
+      <p style="color:var(--ink2);font-size:13px;">Absence de contrôle systématique au moment de la validation : le système permet à un manager de valider ses propres dépenses sans alerte. Les règles de validation ne sont pas formalisées dans une procédure accessible à tous.</p>
+    </div>
+    <div class="card" style="margin:8px 0 0;background:var(--bg2);border-left:3px solid var(--forest);">
+      <div class="card-title ct-f">Recommandation</div>
+      <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong>R1 (Priorité Haute — 3 mois) :</strong> Paramétrer le système de gestion des notes de frais pour bloquer la validation d'une dépense par son initiateur. Toute dépense doit être validée par un niveau hiérarchique supérieur.</p>
+      <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong>R2 (Priorité Haute — 3 mois) :</strong> Formaliser et communiquer la politique de remboursement des frais professionnels — liste des dépenses éligibles, seuils, justificatifs requis.</p>
+      <p style="color:var(--ink2);font-size:13px;"><strong>R3 (Priorité Moyenne — 6 mois) :</strong> Mettre en place une analyse trimestrielle automatisée des dépenses par collaborateur et par catégorie pour détecter les anomalies (contrôle détectif compensatoire).</p>
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Exemple 2 — Recommandation sur un contrôle de caisse (contexte Norauto centres)</div>
+    <div class="card" style="margin:0;background:var(--bg2);border-left:3px solid var(--wine);">
+      <div class="card-title ct-w">Constat</div>
+      <p style="color:var(--ink2);font-size:13px;">Sur 12 centres audités lors de la campagne T4 2024, 8 ne réalisent pas le rapprochement de caisse quotidien conformément à la procédure groupe. Le rapprochement est effectué hebdomadairement dans 5 cas, et non documenté dans 3 cas.</p>
+    </div>
+    <div class="card" style="margin:8px 0 0;background:var(--bg2);border-left:3px solid var(--ochre);">
+      <div class="card-title ct-o">Risque associé</div>
+      <p style="color:var(--ink2);font-size:13px;">Risque de non-détection d'écarts de caisse (fraude ou erreur) sur plusieurs jours. Risque de reporting financier inexact. Risque de non-conformité aux standards groupe avec impact potentiel sur l'audit externe.</p>
+    </div>
+    <div class="card" style="margin:8px 0 0;background:var(--bg2);border-left:3px solid var(--sage);">
+      <div class="card-title ct-s">Cause racine</div>
+      <p style="color:var(--ink2);font-size:13px;">La procédure de rapprochement quotidien est perçue comme chronophage par les équipes en période de forte activité. Absence de suivi centralisé permettant de détecter les centres non-conformes. Pas de conséquence identifiée en cas de non-respect.</p>
+    </div>
+    <div class="card" style="margin:8px 0 0;background:var(--bg2);border-left:3px solid var(--forest);">
+      <div class="card-title ct-f">Recommandation</div>
+      <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong>R1 (Priorité Critique — immédiat) :</strong> Pour les 3 centres sans documentation, réaliser un rapprochement rétroactif sur les 30 derniers jours et identifier tout écart significatif.</p>
+      <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong>R2 (Priorité Haute — 3 mois) :</strong> Mettre en place un tableau de bord centralisé permettant au CI de suivre le taux de complétion quotidien des rapprochements par centre.</p>
+      <p style="color:var(--ink2);font-size:13px;"><strong>R3 (Priorité Moyenne — 6 mois) :</strong> Simplifier le formulaire de rapprochement pour réduire le temps d'exécution, et former les responsables de centre sur l'importance et la méthode.</p>
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">Exemple 3 — Recommandation sur un risque de conformité SAPIN II</div>
+    <div class="card" style="margin:0;background:var(--bg2);border-left:3px solid var(--wine);">
+      <div class="card-title ct-w">Constat</div>
+      <p style="color:var(--ink2);font-size:13px;">La revue du dispositif anticorruption SAPIN II révèle que 40% des fournisseurs référencés dans les pays hors France (Italie, Espagne, Portugal) n'ont pas fait l'objet d'une évaluation du risque de corruption lors de leur référencement. Les évaluations existantes datent de plus de 3 ans sans révision.</p>
+    </div>
+    <div class="card" style="margin:8px 0 0;background:var(--bg2);border-left:3px solid var(--ochre);">
+      <div class="card-title ct-o">Risque associé</div>
+      <p style="color:var(--ink2);font-size:13px;">Risque de non-conformité à la loi SAPIN II. Risque d'exposition à des pratiques de corruption non détectées. Risque de sanction de l'Agence Française Anticorruption (AFA) lors d'un contrôle — pouvant aller jusqu'à 1M€ pour la personne morale.</p>
+    </div>
+    <div class="card" style="margin:8px 0 0;background:var(--bg2);border-left:3px solid var(--forest);">
+      <div class="card-title ct-f">Recommandation</div>
+      <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong>R1 (Priorité Critique — 3 mois) :</strong> Conduire une évaluation anticorruption sur l'ensemble des fournisseurs non évalués, en priorisant ceux dont le volume contractuel dépasse un seuil défini.</p>
+      <p style="color:var(--ink2);font-size:13px;margin-bottom:8px;"><strong>R2 (Priorité Haute — 6 mois) :</strong> Intégrer l'évaluation anticorruption dans le processus de référencement fournisseur — condition préalable à tout nouveau contrat.</p>
+      <p style="color:var(--ink2);font-size:13px;"><strong>R3 (Priorité Moyenne — 1 an) :</strong> Mettre en place une révision périodique des évaluations (tous les 3 ans maximum) avec alerte automatique sur les évaluations périmées.</p>
+    </div>
+  </div>
+
+  <div class="card s">
+    <div class="card-title ct-s">Tonalité des recommandations — Les règles de rédaction</div>
+    <div class="g2" style="margin-bottom:0;">
+      <div>
+        <p style="color:var(--wine);font-size:12.5px;font-weight:600;margin-bottom:8px;">❌ À éviter</p>
+        <ul style="padding-left:14px;color:var(--ink2);font-size:12.5px;line-height:1.9;">
+          <li>"Il faut absolument..." → trop directif</li>
+          <li>"L'équipe n'a pas respecté..." → mise en cause personnelle</li>
+          <li>"Ce processus est défaillant" → jugement sans nuance</li>
+          <li>Recommandation vague : "améliorer le contrôle"</li>
+          <li>Sans priorité ni délai — non actionnable</li>
+        </ul>
+      </div>
+      <div>
+        <p style="color:var(--forest);font-size:12.5px;font-weight:600;margin-bottom:8px;">✔ À privilégier</p>
+        <ul style="padding-left:14px;color:var(--ink2);font-size:12.5px;line-height:1.9;">
+          <li>"Il est recommandé de..." → posture advisory</li>
+          <li>"Le processus actuel ne permet pas de..." → objectif, sur le système</li>
+          <li>"Afin de réduire le risque de X, il est suggéré de..." → lien causal</li>
+          <li>Recommandation SMART : spécifique, mesurable, assignée</li>
+          <li>Toujours avec une priorité (Critique/Haute/Moyenne/Faible)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card f">
+    <div class="card-title ct-f">3 phrases safe pour présenter une recommandation à l'oral</div>
+
+    <div class="card" style="margin:0 0 10px;background:rgba(45,80,22,0.07);border-left:3px solid var(--sage);">
+      <div class="card-title ct-s">Phrase 1 — Niveau "sobre" · Pour introduire</div>
+      <div class="script">"Sur la base de mes observations, je recommande de renforcer le contrôle de validation sur ce processus — afin de réduire le risque d'erreur non détectée."</div>
+    </div>
+
+    <div class="card" style="margin:0 0 10px;background:rgba(139,105,20,0.07);border-left:3px solid var(--ochre);">
+      <div class="card-title ct-o">Phrase 2 — Niveau "structuré" · Pour développer</div>
+      <div class="script">"Le constat principal est le suivant : [fait objectif + chiffre]. Le risque associé est [type de risque + impact]. Ma recommandation est de [action spécifique], avec une priorité [Haute/Moyenne], dans un délai de [X mois]. La mise en œuvre pourrait être pilotée par [owner suggéré]."</div>
+    </div>
+
+    <div class="card" style="margin:0;background:rgba(42,74,107,0.07);border-left:3px solid var(--slate);">
+      <div class="card-title ct-sl">Phrase 3 — Niveau "senior" · Pour conclure</div>
+      <div class="script">"Ce que je recommande n'est pas de créer de la complexité supplémentaire — c'est de corriger un angle mort qui expose l'organisation à un risque qu'elle n'a pas choisi d'accepter. La recommandation est proportionnée : [X] pour réduire significativement [Y]."</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     PIÈGES
+══════════════════════════════ -->
+<section class="section" id="pieges">
+  <div class="section-head">
+    <span class="sec-tag st-f">F2</span>
+    <h2>Pièges à éviter</h2>
+  </div>
+
+  <div class="alert al-w"><strong>// PIÈGE 1 — Présenter le rôle Carrefour comme de l'audit interne</strong>C'était du contrôle interne — 2ème ligne. L'audit interne est la 3ème ligne, indépendant. Cette distinction est testée par Olivier Reynaert.</div>
+  <div class="alert al-w"><strong>// PIÈGE 2 — Rester trop "audit" dans le discours</strong>Dire "je teste", "je vérifie", "je contrôle" sans la dimension structuration = perception profil junior/exécutant. Reformule systématiquement : "j'évalue la robustesse du dispositif", "j'identifie les failles structurelles", "je pilote la montée en maturité".</div>
+  <div class="alert al-w"><strong>// PIÈGE 3 — Ne pas parler de multi-sites et standardisation</strong>La JD est explicite sur "multi-sites ou international". Si tu n'ancres pas systématiquement sur la dimension déploiement réseau + harmonisation groupe, tu rates le cœur du poste.</div>
+  <div class="alert al-w"><strong>// PIÈGE 4 — Ne pas mentionner la culture contrôle interne</strong>Le poste inclut "sensibiliser et accompagner les équipes". Si tu n'évoques pas la pédagogie terrain, la vulgarisation, l'influence sans autorité — tu rates la dimension retail du rôle.</div>
+  <div class="alert al-w"><strong>// PIÈGE 5 — Discours trop théorique</strong>Norauto est un réseau retail — leurs interlocuteurs sont des directeurs de centres auto. Tout framework, toute méthode, toute recommandation doit être traduite en impact concret. "COSO composante 3" ne parle pas à un directeur de centre.</div>
+  <div class="alert al-w"><strong>// PIÈGE 6 — Posture "policier"</strong>Jamais "je vérifie que les règles sont respectées" sans ajouter la dimension accompagnement. Reformule : "je m'assure que les équipes ont les bons outils pour être en contrôle".</div>
+  <div class="alert al-t"><strong>// PIÈGE 7 — Ne pas mentionner la CSRD</strong>La JD parle de "sécurité extra-financière". Si tu n'évoques pas la CSRD spontanément, tu passes à côté d'un signal important de compréhension du poste.</div>
+  <div class="alert al-t"><strong>// PIÈGE 8 — Hésiter sur la mobilité Villeneuve-d'Ascq</strong>L'entretien est en présentiel sur place. Si tu hésites sur ta disponibilité géographique, c'est un red flag immédiat. Sois claire et positive sur ce point dès le début.</div>
+  <div class="alert al-t"><strong>// PIÈGE 9 — Prétendre être passionnée d'automobile</strong>La JD dit explicitement que ça n'est pas requis. Prétendre l'être sonne faux. Montre plutôt que tu comprends les enjeux du secteur — transition responsable, mobilité électrique, réseau de centres.</div>
+</section>
+
+<!-- ══════════════════════════════
+     CHECKLIST
+══════════════════════════════ -->
+<section class="section" id="checklist">
+  <div class="section-head">
+    <span class="sec-tag st-f">F3</span>
+    <h2>Checklist J-1 / Jour J</h2>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title ct-f">J-1 — Préparation</div>
+      <ul class="chklist">
+        <li><span class="chk" onclick="toggleChk(this)"></span>Chercher Olivier Reynaert sur LinkedIn — son background</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Relire les 5 composantes COSO à voix haute</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Maîtriser la distinction 2ème ligne / 3ème ligne</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Répéter le pitch (2 min) à voix haute — FR et EN</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Répéter les 3 STAR à voix haute</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Préparer la réponse mobilité Villeneuve-d'Ascq</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Lire le site Norauto — actualités, valeurs, Move Factory</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Préparer 4 questions (2 Olivier, 2 RH)</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Tenue professionnelle — présentiel = soignée</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title ct-f">Jour J — Présentiel</div>
+      <ul class="chklist">
+        <li><span class="chk" onclick="toggleChk(this)"></span>Arriver 10 min en avance</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Téléphone éteint avant d'entrer</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Poignée de main ferme, contact visuel, sourire — présentiel compte</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Pitch : fil conducteur CI → Norauto → construire</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Mentionner CSRD spontanément au moins 1x</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Ne jamais dire "audit interne" pour Carrefour</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Poser tes questions préparées (au moins 2)</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Demander les prochaines étapes avant de partir</li>
+        <li><span class="chk" onclick="toggleChk(this)"></span>Email de remerciement dans les 24h</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card s">
+    <div class="card-title ct-s">Tes 3 messages à faire passer — coûte que coûte</div>
+    <div class="tl">
+      <div class="tl-item"><div class="tl-label">MESSAGE 1 — Interface groupe ↔ terrain</div><p>"Je ne suis pas un contrôleur qui exécute des tests — je suis l'interface entre les exigences groupe et les réalités opérationnelles locales." → Ancres : relay Carrefour, 82 POS, lien groupe/entités, 12 findings Comité Exécutif.</p></div>
+      <div class="tl-item"><div class="tl-label">MESSAGE 2 — Structuration + culture du contrôle</div><p>"Je sais embarquer des équipes opérationnelles sur le CI sans jargon ni posture policière — parce que le contrôle doit être perçu comme un outil pour eux, pas sur eux." → Ancre : repositionnement self-assessment, early adopters, 75% complétion.</p></div>
+      <div class="tl-item"><div class="tl-label">MESSAGE 3 — Vision risk-based + data</div><p>"Ma priorisation est systématiquement risk-based, et j'utilise la donnée comme levier de détection à grande échelle — ce qu'un réseau de 650 centres exige." → Ancres : analyse de données notes de frais 80K€, approche risk-based.</p></div>
+    </div>
+  </div>
+
+  <div class="alert al-s">
+    <strong>// RAPPEL FINAL</strong>
+    Tu as le bon profil pour ce rôle. L'enjeu n'est pas de prouver ta technicité — c'est de corriger la perception "trop opérationnelle / pas assez structurante". Chaque réponse doit signaler : structuration groupe + terrain + risk-based. Le reste suit.
+  </div>
+</section>
+
+</div>
+</div>
+
+<button class="scroll-top" id="st" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('st').classList.toggle('vis', el.scrollTop > 400);
+});
+
+function toggleQA(el) { el.classList.toggle('open'); }
+function toggleEN(el) { el.classList.toggle('open'); }
+function toggleStar(el) { el.classList.toggle('open'); }
+function toggleChk(el) {
+  el.classList.toggle('done');
+  el.textContent = el.classList.contains('done') ? '✓' : '';
+  event.stopPropagation();
+}
+
+const allSections = document.querySelectorAll('.section');
+const allLinks = document.querySelectorAll('.sb-link');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting)
+      allLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+  });
+}, { rootMargin: '-20% 0px -60% 0px' });
+allSections.forEach(s => obs.observe(s));
+
+const navTabs = document.querySelectorAll('.nav-tab');
+navTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    navTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
